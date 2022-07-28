@@ -8,4 +8,5 @@ scipy
 streamlit
 joblib
 PyAstronomy
-scikit-learn 
+scikit-learn
+dill 
