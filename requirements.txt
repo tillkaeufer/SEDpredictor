@@ -1,6 +1,5 @@
 numpy
 tensorflow
-joblib
 pickle 
 PIL 
 altair 
