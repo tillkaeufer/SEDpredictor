@@ -7,4 +7,5 @@ matplotlib
 scipy 
 streamlit
 joblib
-PyAstronomy 
+PyAstronomy
+scikit-learn 
