@@ -1,0 +1,10 @@
+numpy
+tensorflow
+joblib
+pickle 
+PIL 
+altair 
+pandas
+matplotlib
+scipy 
+streamlit 

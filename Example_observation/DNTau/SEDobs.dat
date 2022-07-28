@@ -1,0 +1,182 @@
+180										
+lam[mic]	flux[Jy]	sigma[Jy]	rem	filter	typ	pointing	mag	err_mag	bibcode	comments
+0.153	5.72E-05	2.70E-06	ok	GALEX.FUV	CCD	0.16				
+0.1535	6.93E-06	3.79E-06	??	GALEX.FUV	CCD	330.245	None	pointing_was_off		
+0.231	0.000208	3.00E-06	ok	GALEX.NUV	CCD	0.16				
+0.291	0.00124	0	??	generic	CCD	0.65	unknown_filter_and_error_given_a_0			
+0.291	0.00126	0	??	generic	CCD	1.98	unknown_filter_and_error_given_a_0			
+0.344	0.00778	1.00E-05	??	generic	CCD	0.42	unknown_filter			
+0.344	0.0078	1.00E-05	??	generic	CCD	0.24	unknown_filter			
+0.344	0.0078	1.00E-05	??	generic	CCD	0.24	unknown_filter			
+0.3516	4.11E-03	4.11E-05	ok	SDSS.U	CCD	0.192	14.901	0.002	2011yCat.2306....0A	-
+0.352	0.00209	1.00E-05	ok	SDSS.U	CCD	0.09				
+0.353	0.0345	0	??	JOHNSON.U	CCD	0.16				
+0.3637	2.69E-03	2.69E-04	??	JOHNSON.U	CCD	NaN	14.59	NaN	1997A&AS..124..349M	-
+0.3637	6.96E-03	6.96E-04	??	JOHNSON.U	CCD	10.8	13.56	NaN	2002yCat.2237....0D	pointing_was_off
+0.42	0.0258	0	??	HIPPARCOS.HP	CCD	2.44				
+0.4434	1.13E-02	1.13E-03	??	JOHNSON.B	CCD	NaN	13.91	NaN	1997A&AS..124..349M	-
+0.4434	1.42E-02	4.26E-03	ok	USNOB1.B1	CCD	0.109	13.66	NaN	2003AJ....125..984M	unreliable_zeropoint_and_transmission_profile
+0.4434	2.92E-02	2.92E-03	??	JOHNSON.B	CCD	10.8	12.88	NaN	2002yCat.2237....0D	pointing_was_off
+0.444	0.0133	0.0056	ok	JOHNSON.B	CCD	0.23				
+0.444	0.0143	0.0012	ok	JOHNSON.B	CCD	0.09				
+0.444	0.0153	0.0014	ok	JOHNSON.B	CCD	0.53				
+0.4677	1.80E-02	1.80E-04	ok	SDSS.G	CCD	0.192	13.257	0.001	2011yCat.2306....0A	-
+0.468	0.0174	0.0067	??	generic	CCD	0.23				
+0.477	0.00165	1.00E-05	??	generic	CCD	2.21	unknown_filter			
+0.477	0.0164	0	??	generic	CCD	0.23	unknown_filter			
+0.477	0.0177	0	??	generic	CCD	0.21	unknown_filter			
+0.482	0.0137	0	??	SDSS.G	CCD	0.09	Error_given_as_0			
+0.482	0.0223	0.0014	ok	SDSS.G	CCD	0.09				
+0.505	0.0398	0.0011	??	generic	CCD	0.13	unknown_filter			
+0.543	0.00457	1.00E-05	??	generic	CCD	1.98	unknown_filter			
+0.5493	3.59E-02	3.59E-03	??	JOHNSON.V	CCD	NaN	12.53	NaN	1997A&AS..124..349M	-
+0.5493	4.23E-02	7.67E-03	ok	JOHNSON.V	CCD	1.02	12.354	0.197	2007PASP..119.1083R	-
+0.5493	9.28E-02	9.28E-03	??	JOHNSON.V	CCD	10.8	11.5	NaN	2002yCat.2237....0D	pointing_was_off
+0.554	0.00754	0	??	JOHNSON.V	CCD	0.15				
+0.554	0.0298	0	??	JOHNSON.V	CCD	5.21	pointing_was_off			
+0.554	0.0354	0	??	JOHNSON.V	CCD	0.15				
+0.554	0.0381	0	??	JOHNSON.V	CCD	0.15				
+0.554	0.0395	0	??	JOHNSON.V	CCD	0.15				
+0.554	0.0414	0	??	JOHNSON.V	CCD	1.09	pointing_was_off			
+0.554	0.0416	0.0076	ok	JOHNSON.V	CCD	0.89				
+0.554	0.0427	0.0008	ok	JOHNSON.V	CCD	0.09				
+0.554	0.0427	0.0007	ok	JOHNSON.V	CCD	0.14				
+0.613	0.0533	0	??	generic	CCD	0.21	unknown_filter			
+0.613	0.0615	0	??	generic	CCD	0.23	unknown_filter			
+0.6168	6.90E-02	6.90E-04	ok	SDSS.R	CCD	0.192	11.799	0.001	2011yCat.2306....0A	-
+0.623	0.0843	0.0006	ok	GAIA.G	CCD	0.13				
+0.6247	6.38E-02	6.38E-03	??	SDSS.RP	CCD	0.112	11.886	NaN	2008ApJS..175..297A	-
+0.625	0.0632	0.0001	ok	SDSS.R	CCD	0.09				
+0.625	0.0724	0.002	ok	SDSS.R	CCD	0.09				
+0.625	0.0735	0.0021	ok	SDSS.R	CCD	0.14				
+0.64	0.0872	0.0363	??	generic	CCD	0.23				
+0.673	0.0339	0.0009	??	GAIA.G	CCD	0.23				
+0.673	0.0771	0.0006	ok	GAIA.G	CCD	0.23				
+0.673	0.0828	0.0005	ok	GAIA.G	CCD	0.11				
+0.673	0.184	0.004	??	GAIA.G	CCD	0.23				
+0.6899	9.29E-02	2.79E-02	??	USNOB1.R1	CCD	0.109	11.3	NaN	2003AJ....125..984M	unreliable_zeropoint_and_transmission_profile
+0.748	0.00152	0.00027	??	generic	CCD	2.21	unknown_filter			
+0.748	0.00573	5.00E-05	??	generic	CCD	3.02	unknown_filter			
+0.748	0.0833	0	??	generic	CCD	0.21	unknown_filter			
+0.748	0.117	0	??	generic	CCD	0.23	unknown_filter			
+0.7496	1.36E-01	1.36E-03	ok	SDSS.I	CCD	0.192	11.061	0.001	2011yCat.2306....0A	-
+0.763	0.124	0	??	SDSS.I	CCD	0.09	Error_given_as_0			
+0.763	0.149	0.004	ok	SDSS.I	CCD	0.09				
+0.763	0.152	0.004	ok	SDSS.I	CCD	0.14				
+0.772	0.16	0.003	??	generic	CCD	0.13	unknown_filter			
+0.784	0.147	0.063	??	generic	CCD	0.23				
+0.7875	1.55E-01	2.30E-02	ok	COUSINS.I	CCD	1.02	10.523	0.161	2007PASP..119.1083R	unreliable_zeropoint
+0.789	0.162	0	??	COUSINS.I	CCD	0.15				
+0.865	0.112	0	??	generic	CCD	0.21	unknown_filter			
+0.865	0.179	0	??	generic	CCD	0.23	unknown_filter			
+0.897	1.73E-01	1.73E-03	??	SDSS.Z	CCD	0.192	10.81	0.001	2011yCat.2306....0A	-
+0.902	0.134	0	??	SDSS.Z	CCD	0.09	Error_given_as_0			
+0.96	0.138	0	??	generic	CCD	0.21	unknown_filter			
+0.96	0.227	0	??	generic	CCD	0.23	unknown_filter			
+1.239	0.348	0	??	2MASS.J	CCD	0.16				
+1.239	0.349	0.007	ok	2MASS.J	CCD	0.02				
+1.239	0.352	0	??	2MASS.J	CCD	0.02				
+1.239	0.361	0	??	2MASS.J	CCD	0.16				
+1.2393	3.45E-01	6.68E-03	ok	2MASS.J	CCD	0.005	9.139	0.021	2003yCat.2246....0C	high_quality_(A)
+1.2431	3.68E-01	3.68E-02	??	JOHNSON.J	CCD	10.8	9.12	NaN	2002yCat.2237....0D	pointing_was_off
+1.25	0.356	0.007	ok	JOHNSON.J	CCD	0.09				
+1.63	0.479	0.012	ok	JOHNSON.H	CCD	0.08				
+1.6442	5.20E-01	5.20E-02	??	JOHNSON.H	CCD	10.8	8.27	NaN	2002yCat.2237....0D	pointing_was_off
+1.649	0.232	0.006	??	2MASS.H	CCD	0.16				
+1.649	0.471	0	??	2MASS.H	CCD	0.02				
+1.649	0.483	0.012	ok	2MASS.H	CCD	0.02				
+1.649	0.483	0.013	ok	2MASS.H	CCD	0.08				
+1.649	0.503	0	??	2MASS.H	CCD	0.16				
+1.6495	4.78E-01	1.19E-02	ok	2MASS.H	CCD	0.005	8.342	0.027	2003yCat.2246....0C	high_quality_(A)
+2.1639	4.16E-01	8.04E-03	ok	2MASS.KS	CCD	0.005	8.015	0.021	2003yCat.2246....0C	high_quality_(A)
+2.164	0.415	0	??	2MASS.KS	CCD	0.02				
+2.164	0.418	0	??	2MASS.KS	CCD	0.16				
+2.164	0.42	0.008	ok	2MASS.KS	CCD	0.02				
+2.164	0.426	0	??	2MASS.KS	CCD	0.16				
+2.1879	4.52E-01	4.52E-02	??	JOHNSON.K	CCD	10.8	7.94	NaN	2002yCat.2237....0D	pointing_was_off
+2.19	0.4	0.003	ok	JOHNSON.K	CCD	0.16				
+2.19	0.406	0.008	ok	JOHNSON.K	CCD	0.08				
+2.201	0.0691	0	??	generic	CCD	0.09				
+3.35	0.25	0.007	??	WISE.W1	BOL	0.13				
+3.35	0.251	0.006	ok	WISE.W1	BOL	0.02				
+3.35	0.265	0.007	??	WISE.W1	BOL	0.09				
+3.3682	2.54E-01	5.84E-03	ok	WISE.W1	BOL	0.157	7.716	0.025	2012yCat.2311....0C	point_source
+3.5271	3.01E-01	3.01E-02	??	JOHNSON.L	CCD	10.8	7.43	NaN	2002yCat.2237....0D	pointing_was_off
+3.55	0.288	0.001	ok	IRAC3.6	BOL	0.29				
+3.55	0.293	0.005	ok	IRAC3.6	BOL	0.13				
+3.5569	2.88E-01	2.88E-03	ok	IRAC.36	BOL	5.964	2006sptz.prop30816P	-		
+3.6	2.90E-01	2.30E-03	ok	IRAC.36	BOL	0	Luhman	ApJ,	187:51:00	
+4.493	0.246	0.001	ok	IRAC4.5	BOL	0.29				
+4.493	0.248	0.005	ok	IRAC4.5	BOL	0.23				
+4.5	2.50E-01	2.00E-03	ok	IRAC.45	BOL	0	Luhman	ApJ,	187:51:00	
+4.502	2.46E-01	2.46E-03	ok	IRAC.45	BOL	5.964	2006sptz.prop30816P	-		
+4.6	0.209	0.004	ok	WISE.W2	BOL	0.02				
+4.6	0.21	0	??	WISE.W2	BOL	0.02				
+4.6	0.222	0.004	ok	WISE.W2	BOL	0.09				
+4.6179	2.10E-01	3.88E-03	ok	WISE.W2	BOL	0.157	7.28	0.02	2012yCat.2311....0C	point_source
+5.0122	2.75E-01	2.75E-02	??	JOHNSON.M	CCD	10.8	6.8	NaN	2002yCat.2237....0D	pointing_was_off
+5.731	0.223	0.001	ok	IRAC5.8	BOL	0.29				
+5.731	0.245	0.007	ok	IRAC5.8	BOL	0.13				
+5.731	0.248	0	??	IRAC5.8	BOL	0.29	Error_given_as_0			
+5.745	2.23E-01	2.23E-03	ok	IRAC.58	BOL	5.964	2006sptz.prop30816P	-		
+5.8	2.30E-01	2.80E-03	ok	IRAC.58	BOL	0	Luhman	ApJ,	187:51:00	
+7.872	0.248	0.011	ok	IRAC8.0	BOL	1.39	Pointing_is_not_great			
+7.872	0.255	0.007	ok	IRAC8.0	BOL	0.13				
+7.9158	2.48E-01	2.48E-03	ok	IRAC.80	BOL	5.964	2006sptz.prop30816P	-		
+8	2.60E-01	3.10E-03	ok	IRAC.80	BOL	0	Luhman	ApJ,	187:51:00	
+8.61	0.265	0.015	ok	AKARI.S9W	BOL	0.02				
+9.0995	2.65E-01	1.50E-02	ok	AKARI.S9W	BOL	0.59	2010A&A...514A...1I	high_quality		
+10.1999	2.87E-01	2.87E-02	??	JOHNSON.N	CCD	10.8	5.4	NaN	2002yCat.2237....0D	pointing_was_off
+11.4099	4.07E-01	4.07E-02	??	IRAS.F12	BOL	10.2	1988IRASP.C......0J	upper_limit,_pointing_was_off		
+11.56	0.248	0.005	??	WISE.W3	BOL	0.23				
+11.56	0.249	0.004	??	WISE.W3	BOL	0.02				
+11.56	0.272	0	??	WISE.W3	BOL	0.02				
+11.59	0.343	0	ok	IRAS12	BOL	0.02				
+12.073	2.72E-01	4.01E-03	ok	WISE.W3	BOL	0.157	5.164	0.016	2012yCat.2311....0C	point_source
+18.39	0.417	0.046	ok	AKARI.L18W	BOL	0.02				
+19.505	4.17E-01	4.56E-02	ok	AKARI.L18W	BOL	0.59	2010A&A...514A...1I	high_quality		
+22.091	0.505	0.01	ok	WISE.W4	BOL	0.09				
+22.091	0.507	0.01	ok	WISE.W4	BOL	0.02				
+22.091	0.511	0	??	WISE.W4	BOL	0.02				
+22.1943	5.11E-01	9.88E-03	ok	WISE.W4	BOL	0.157	3.035	0.021	2012yCat.2311....0C	most_likely_not_variable_(1,_0=certainly_not-5=probably_not);_point_source
+23.6108	6.66E-01	7.33E-02	??	IRAS.F25	BOL	10.2	1988IRASP.C......0J	high_quality,_pointing_was_off		
+23.675	0.434	0.016	??	MIPS.24	BOL	1.39	Pointing_is_not_great			
+23.675	0.451	0.017	??	MIPS.24	BOL	0.13				
+23.675	17.8	0.7	??	MIPS.24	BOL	0.16				
+23.88	0.55	0	ok	IRAS25	BOL	0.02				
+23.88	0.666	0	??	IRAS25	BOL	0.02				
+24	4.30E-01	1.00E-02	??	MIPS.24	BOL	0	Luhman	ApJ,	187:51:00	
+24.2035	4.33E-01	4.33E-03	??	MIPS.24	BOL	5.964	2006sptz.prop30816P	-		
+60.4093	7.49E-01	9.74E-02	ok	IRAS.F60	BOL	10.2	1988IRASP.C......0J	high_quality		
+61.85	0.58	0	??	IRAS60	BOL	0.02				
+61.85	0.749	0	??	IRAS60	BOL	0.02				
+65	1.42	0	??	AKARI.N60	BOL	0.08				
+69.999	0.7	0.1	ok	PACS.70	BOL	0.16				
+70	5.20E-01	5.00E-02	??	MIPS.70	BOL	0	Rebull	ApJ,	190:19:00	
+70	0.69	0.07	ok	PACS70	BOL	0	Herschel/GASPS			
+70.4471	5.16E-01	1.03E-01	??	MIPS.70	BOL	5.964	2006sptz.prop30816P	-		
+71.42	0.517	0.105	??	MIPS.70	BOL	1.39	Pointing_is_not_great			
+87.8971	7.61E-01	1.14E-01	ok	AKARI.WIDES	BOL	0.1	2007PASJ...59S.369M	high_quality		
+90.001	0.761	0.114	ok	AKARI.WIDES	BOL	0.08				
+100.001	0.8	0.2	ok	PACS.100	BOL	0.16				
+101.949	4.64	0	??	IRAS100	BOL	0.02				
+101.949	9.4	0	??	IRAS100	BOL	0.02				
+139.998	0.675	0	??	AKARI.WIDEL	BOL	0.08				
+148.761	6.75E-01	6.75E-02	??	AKARI.WIDEL	BOL	0.1	2007PASJ...59S.369M	the_source_is_not_confirmed		
+155.898	0.153	0	??	MIPS160	BOL	1.39	Pointing_is_not_great			
+160	0.8	0.2	ok	PACS.160	BOL	0.16				
+160	1.86	0	??	AKARI.N160	BOL	0.08				
+162.594	1.86E+00	1.86E-01	??	AKARI.N160	BOL	0.1	2007PASJ...59S.369M	the_source_is_not_confirmed		
+249.994	0.6	0.1	ok	SPIRE.250	BOL	0.16				
+345	0.615	0.064	ok	SCUBA.350NB	BOL	0	ApJ	2005,	631,	1134
+362.998	0.5	0.1	ok	SPIRE.350	BOL	0.16				
+445	0	0.234	ul	SCUBA.450NB	BOL	0	ApJ	2005,	631,	1134
+516.999	0.4	0.08	ok	SPIRE.500	BOL	0.16				
+849.27	0.201	0.007	??	generic	BOL	0.15	unknown_filter			
+850	0.201	0.007	ok	SCUBA.850NB	BOL	0	ApJ	2005,	631,	1134
+886.96	0.21	0.018	??	generic	BOL	0.15	unknown_filter			
+1299.998	0.084	0.013	??	generic	BOL	0.15	unknown_filter			
+1300	0.084	0.013	ok	generic	BOL	0	ApJ	2005,	631,	1134
+1330	0.09	0.002	ok	generic	BOL	0	ApJ	2007,	659,	705
+1332.411	0.0823	0.0045	??	generic	BOL	0.15	unknown_filter			
+2700	0.0161	0.0025	ok	generic	BOL	0	A&A	1996,	309,	493

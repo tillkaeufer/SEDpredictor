@@ -1,0 +1,69 @@
+      67
+   lam[mic]    flux[Jy]   sigma[Jy] rem  filter        typ pointing       mag   err_mag              bibcode |  comments
+     0.3516  7.0683E-03  1.1067E-04  ??   SDSS.U       CCD    0.194   14.3130    0.0170  2011yCat.2306....0A |  -
+     0.3637  1.4269E-02  1.4269E-03  ??   JOHNSON.U    CCD    0.900   12.7800       NaN  2002yCat.2237....0D |  -
+     0.3637  3.3296E-04  3.3296E-05  ??   JOHNSON.U    CCD      NaN   16.8600       NaN  1997A&AS..124..349M |  -
+     0.4434  1.9417E-02  5.8252E-03  ??   USNOB1.B1    CCD    0.444   13.3200       NaN  2003AJ....125..984M |  unreliable_zeropoint_and_transmission_profile
+     0.4434  1.7450E-02  1.7450E-03  ??   JOHNSON.B    CCD    0.900   13.4400       NaN  2002yCat.2237....0D |  -
+     0.4434  1.8784E-03  1.8784E-04  ??   JOHNSON.B    CCD      NaN   15.8600       NaN  1997A&AS..124..349M |  -
+     0.4677  5.6920E-03  5.6920E-05  ??   SDSS.G       CCD    0.194   14.5040    0.0010  2011yCat.2306....0A |  -
+     0.5493  4.4407E-02  4.4407E-03  ??   JOHNSON.V    CCD    0.900   12.3000       NaN  2002yCat.2237....0D |  -
+     0.5493  7.5762E-03  7.5762E-04  ??   JOHNSON.V    CCD      NaN   14.2200       NaN  1997A&AS..124..349M |  -
+     0.6247  1.4051E-02  3.1964E-03  ??   SDSS.RP      CCD    0.169   13.5290    0.2470  2008ApJS..175..297A |  -
+     0.6899  9.5479E-02  2.8644E-02  ??   USNOB1.R1    CCD    0.444   11.2700       NaN  2003AJ....125..984M |  unreliable_zeropoint_and_transmission_profile
+     1.2393  2.5466E-01  5.1602E-03  ok   2MASS.J      CCD    0.004    9.4700    0.0220  2003yCat.2246....0C |  high_quality_(A)
+     1.2431  2.6423E-01  2.6423E-02  ??   JOHNSON.J    CCD    0.900    9.4800       NaN  2002yCat.2237....0D |  -
+     1.6442  4.5281E-01  4.5281E-02  ??   JOHNSON.H    CCD    0.900    8.4200       NaN  2002yCat.2237....0D |  -
+     1.6495  5.2409E-01  1.5929E-02  ok   2MASS.H      CCD    0.004    8.2430    0.0330  2003yCat.2246....0C |  high_quality_(A)
+     2.1639  8.0122E-01  1.2545E-02  ok   2MASS.KS     CCD    0.004    7.3030    0.0170  2003yCat.2246....0C |  high_quality_(A)
+     2.1879  6.9654E-01  6.9654E-02  ??   JOHNSON.K    CCD    0.900    7.4700       NaN  2002yCat.2237....0D |  -
+     3.3682  9.3468E-01  4.0461E-02  ok   WISE.W1      BOL    0.059    6.3000    0.0470  2012yCat.2311....0C |  point_source
+     3.5271  9.1618E-01  9.1618E-02  ??   JOHNSON.L    CCD    0.900    6.2200       NaN  2002yCat.2237....0D |  -
+     3.6000  1.0100E+00  1.0000E-02  ok   IRAC.36      BOL    0.000                      2010ApJS..186..111L |   
+     4.5000  1.1300E+00  1.0000E-02  ok   IRAC.45      BOL    0.000                      2010ApJS..186..111L |   
+     4.6179  1.1540E+00  3.0822E-02  ok   WISE.W2      BOL    0.059    5.4320    0.0290  2012yCat.2311....0C |  point_source
+     5.0122  1.0953E+00  1.0953E-01  ??   JOHNSON.M    CCD    0.900    5.3000       NaN  2002yCat.2237....0D |  -
+     5.8000  1.1500E+00  1.0000E-02  ok   IRAC.58      BOL    0.000                      2010ApJS..186..111L |   
+     8.0000  1.3000E+00  2.0000E-02  ok   IRAC.80      BOL    0.000                      2010ApJS..186..111L |   
+     9.0995  1.4590E+00  6.3300E-02  ok   AKARI.S9W    BOL    0.650                      2010A&A...514A...1I |  high_quality
+    10.1999  1.4242E+00  1.4242E-01  ??   JOHNSON.N    CCD    0.900    3.6600       NaN  2002yCat.2237....0D |  -
+    11.4099  1.9100E+00  1.9100E-01  ??   IRAS.F12     BOL    5.100                      1988IRASP.C......0J |  high_quality
+    12.0730  1.2940E+00  1.6685E-02  ok   WISE.W3      BOL    0.059    3.4720    0.0140  2012yCat.2311....0C |  point_source
+    19.5050  2.4930E+00  1.3800E-01  ok   AKARI.L18W   BOL    0.650                      2010A&A...514A...1I |  high_quality
+    22.1943  2.8733E+00  3.7050E-02  ok   WISE.W4      BOL    0.059    1.1600    0.0140  2012yCat.2311....0C |  most_likely_not_variable_(2,_0=certainly_not-5=probably_not);_point_source
+    23.6108  3.8800E+00  2.7160E-01  ??   IRAS.F25     BOL    5.100                      1988IRASP.C......0J |  high_quality
+    24.0000  3.4500E+00  6.0000E-02  ok   MIPS.24      BOL    0.000                      2010ApJS..186..111L |   
+    60.4093  5.9300E+00  5.9300E-01  ??   IRAS.F60     BOL    5.100                      1988IRASP.C......0J |  high_quality
+    66.2934  4.5250E+00  3.2000E-01  ok   AKARI.N60    BOL    4.700                      2007PASJ...59S.369M |  high_quality
+    70.0000  2.7400E+00  2.4000E-01  ??   MIPS.70      BOL    0.000                      2010ApJS..186..259R |   
+    87.8971  5.1620E+00  1.2500E-01  ok   AKARI.WIDES  BOL    4.700                      2007PASJ...59S.369M |  high_quality
+   101.1190  6.4700E+00  5.8230E-01  ??   IRAS.F100    BOL    5.100                      1988IRASP.C......0J |  high_quality
+   148.7610  4.9850E+00  1.3700E+00  ok   AKARI.WIDEL  BOL    4.700                      2007PASJ...59S.369M |  high_quality
+   160.0000  5.8800E+00  3.3000E-01  ??   MIPS.160     BOL    0.000                      2010ApJS..186..259R |   
+   162.5940  6.4340E+00  8.8200E-01  ??   AKARI.N160   BOL    4.700                      2007PASJ...59S.369M |  the_source_is_not_confirmed
+   450.0000  7.3400E-01  5.0000E-02  ??   SCUBA.450WB  BOL    0.000                      2007ApJ...671.1800A |  Fluxes from SCUBA archive. Ref:
+   457.1710  8.3000E-01  8.3000E-02  ??   SCUBA.450WB  BOL    3.000                      2008ApJS..175..277D |  -
+   850.0000  2.5800E-01  4.2000E-02  ok   SCUBA.850WB  BOL    0.000                      2007ApJ...671.1800A |  Fluxes from SCUBA archive. Ref:
+   860.0110  2.6000E-01  2.6000E-02  ok   SCUBA.850WB  BOL    3.000                      2008ApJS..175..277D |  -
+  1300.0000  1.3600E-01  1.1000E-02  ok   generic      BOL    0.000                      1991ApJ...381..250B |  CSO  
+  2000.0000  3.7000E-02  3.7000E-03  ok   generic      BOL    0.000                      2002ApJ...581..357K |  NMA
+  7000.0000  1.8000E-03  7.1000E-04  ul   generic      BOL    0.000                      1995ApJ...452L..69K |  VLA, LA NB, error includes cal
+  7800.0000  8.5600E-04  1.7800E-04  ok   generic      BOL    0.000                                      NaN |  Green Bank Telescop    
+  8600.0000  1.0530E-03  1.1500E-04  ok   generic      BOL    0.000                                      NaN |  Green Bank Telescop    
+  9000.0000  1.2500E-03  6.1000E-04  ul   generic      BOL    0.000                                      NaN |  Green Bank Telescop    
+  9600.0000  8.1900E-04  1.1800E-04  ok   generic      BOL    0.000                                      NaN |  Green Bank Telescop    
+ 10800.0000  5.1700E-04  1.0800E-04  ok   generic      BOL    0.000                                      NaN |  Green Bank Telescop    
+   4.82e-1	6.21e-3	 3.e-4       ok   SDSS.GP      CCD    0.0                        II/336/apass9       |  VizieR Photometry viewer
+   6.25e-1	21.3e-3	 1.e-3       ok   SDSS.RP      CCD    0.0                        II/336/apass9       |  VizieR Photometry viewer 
+   7.63e-1	48.3e-3	 2.e-3       ok   SDSS.IP      CCD    0.0                        II/336/apass9       |  VizieR Photometry viewer 
+   4.44e-1	4.41e-3	 2.e-4       ok   JOHNSON.B    CCD    0.0                        II/336/apass9       |  VizieR Photometry viewer 
+   5.54e-1	11.6e-3	 6.e-4       ok   JOHNSON.V    CCD    0.0                        II/336/apass9       |  VizieR Photometry viewer  
+   8.82e-1	74.2e-3	 4.e-3	     ok   UKIDSS.Z     CCD    0.0                        II/314/gcs8         |  VizieR Photometry viewer  
+   70.0	        5.1      0.8         ok   PACS.70      BOL    0.0			 Howard+2013	     |  GASPS photometry 
+  100.0	        4.7      0.7         ok   PACS.100     BOL    0.0			 Howard+2013	     |  GASPS photometry 
+  140.0	        4.1      0.8         ok   PACS.160     BOL    0.0			 Howard+2013	     |  GASPS photometry 
+  887.0         0.253    0.026       ok   generic      BOL    0.0                        J/ApJ/771/129/table2|  VizieR Photometry viewer
+ 1330.0         0.108    0.007       ok   generic      BOL    0.0                        J/ApJ/771/129/table2|  VizieR Photometry viewer
+ 2700.0         0.0255   0.0027      ok   generic      BOL    0.0                        Dutrey+1996         |  IRAM    
+ 3570.0         0.0138   0.00029     ok   generic      BOL    0.0                        Ricci+2010          |  PdBI
+ 7000.0         0.00247  0.00029     ok   generic      BOL    0.0                        Rodmann+2006        |  VLA
