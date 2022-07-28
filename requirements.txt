@@ -6,4 +6,5 @@ pandas
 matplotlib
 scipy 
 streamlit
-joblib 
+joblib
+PyAstronomy 
