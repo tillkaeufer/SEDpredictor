@@ -5,4 +5,5 @@ altair
 pandas
 matplotlib
 scipy 
-streamlit 
+streamlit
+joblib 
