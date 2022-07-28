@@ -1,6 +1,6 @@
 numpy
 tensorflow
-PIL 
+pillow
 altair 
 pandas
 matplotlib
