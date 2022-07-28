@@ -1,6 +1,5 @@
 numpy
 tensorflow
-pickle 
 PIL 
 altair 
 pandas
