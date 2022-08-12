@@ -1,0 +1,152 @@
+-------------------------------------------------------------
+***  standard DIANA parameter input-file for ProDiMo      ***
+***  works with small and large DIANA chemical standards  ***
+-------------------------------------------------------------
+
+----- star and irradiation -----
+1.8              ! Mstar [Msun] : set by evolution
+6.15              ! Lstar       [Lsun] : set by evolution
+7800.0              ! Teff        [K] : set by evolution
+0.001         ! fUV         [-]      : LUV/Lstar
+2.0         ! pUV         [-]      : UV powerlaw exponent
+.true.      ! Xrays       [-]      : use Xray chemistry and heating?
+1.84E+29    ! Xray_Lum    [erg/s]  : X-ray luminosity
+3.24E+6     ! Xray_Temp   [K]      : X-ray emission temperature
+1.7E-17     ! CRI         [1/s]    : cosmic ray ionisation of H2
+1.0         ! CHI_ISM     [-]      : strength of incident vertical UV
+
+------ dust parameters ------
+  4.63733130E-02                   ! amin : set by evolution
+  6.50641453E+03                   ! amax : set by evolution
+  3.75909650E+00                   ! apow : set by evolution
+2           ! settle_method       : dust settling (Dubrulle et al. 1995)
+  3.75083025E-03               ! a_settle : set by evolution
+0.8         ! hollow_sphere       : max hollow volume ratio
+dust_opacity_list2.txt            ! dust_opacity_list_file
+3           ! NDUST               : number of selected dust species
+  0.525853240062410         Mg0.7Fe0.3SiO3[s]
+  0.224146759937590         amC-Zubko[s]
+  0.25      vacuum[s]
+.true.      ! PAH_in_RT
+  9.75794053E-01            ! PAH_charged : set by evolution
+.false.     ! UVgasRT
+
+------ gas parameters ------
+0.2         ! ChemHeatFac [-]     : efficiency of chemical heating
+0.0         ! alpha_vis [-]       : viscous heating parameter
+0.15        ! v_turb    [km/s]    : turbulent velocity
+.true.      ! UMIST2012           : using UMIST2012 rates?
+onlyadd     ! handle_UMIST        : handle UMIST-data (erase/overwrite/onlyadd)
+0           ! num_noerase         : exceptions from erasing UMIST data
+
+------ disk shape ------
+.true.      ! MCFOST_LIKE
+2           ! NZONES
+------ outer zone ------
+  5.81416752E-03                  ! Mdisk : set by evolution
+  2.16442018E+01                    ! Rin : set by evolution
+  5.00000000E+01                 ! Rtaper : set by evolution
+  2.50000000E+02                   ! Rout : set by evolution
+  1.00000000E+00                ! epsilon : set by evolution
+  7.00000000E-01                 ! gtaper : set by evolution
+100.0       ! MCFOST_RREF
+9.61573509              ! MCFOST_H0 : set by evolution
+  1.06834141E+00            ! MCFOST_BETA : set by evolution
+0.01        ! dust_to_gas
+  7.73345106E-01                   ! fPAH : set by evolution
+------ inner zone ------
+  7.90989513E-07                 ! M2disk : set by evolution
+0.1         ! R2in
+5.0	    ! R2out
+  1.37637770E+00               ! e2psilon : set by evolution
+1.0         ! MCFOST_R2
+0.0346000593              ! MCFOST_H2 : set by evolution
+  7.94951110E-01              ! MCFOST_B2 : set by evolution
+0.01        ! d2ust_to_gas
+0.0001      ! f2PAH
+
+------ the big molecules -------------------------------
+***  more options available, but not DIANA standard  ***
+--------------------------------------------------------
+.true.       ! H2O_rovibration     : big ro-vib H2O models?
+.true.       ! H2O_Daniel2011      : new H2O collision rates
+
+------ dimensions ------
+70          ! NXX
+50          ! NZZ
+40          ! NLAM
+.true.      ! refine_Spitzer
+12	    ! Ninner
+15	    ! NnewWall
+0.5         ! NXratio
+9           ! NUV
+3           ! N1UV
+19          ! Ntheta
+11          ! Nphi
+50          ! RTitmax
+5.0         ! tau_cutoff
+
+------ accelerations --------------------------------------------
+***  You can accelerate ProDiMo by up to factor 10,           ***
+***  but you need to be very careful and make a lot of tests. ***
+***  Look at the wiki!!!                                      ***
+-----------------------------------------------------------------
+.true.      ! parallel_chem
+.false.     ! parallel_debug
+.false.     ! ignore_Tg_midplane
+.false.     ! use_chemsol
+
+------ image and SED parameters ------
+.true.      ! calcSED           : calculate SED and images?
+.true.      ! monoSED           : use monochromatic mode?
+300         ! NlamSED           : number of lambda gridpoints
+0.1         ! lminSED           : minimum lambda[mic]
+10000.0     ! lmaxSED           : minimum lambda[mic]
+114.87              ! dist      [pc]    : distance
+13.0        ! incl      [deg]   : inclination (0=face-on)
+
+------ line transfer? ------
+.true.      ! line_transfer     : calculate line transfer?
+.false.     ! immediate_lines   : line RT after init (requires write_pop)?
+.false.     ! line_cube         : 3D-line cube output?
+.false.     ! FLiTs             : want to run FLiTs afterwards?
+200         ! line_Ndisk
+72          ! line_Ntheta
+301         ! line_image_side_Npix
+
+------ tolerances ------
+20.0        ! cputime_max [s]   : max. CPU time for advance_chemistry
+
+------ switches ------
+0           ! verbose_level     : how much output? (-1...4)
+.false.     ! solve_diskstruc   : solve vertical hydrostatic equilibrium?
+.true.      ! solve_temp        : solve the heating/cooling balance?
+.true.      ! chi_from_RT       : calculate chi from UV rad. transfer?
+.true.      ! Td_from_RT        : calculate dust temp. from rad. transfer?
+.true.      ! Jback_from_RT     : calculate background Jnu from rad. transfer?
+.true.      ! UVpumping         : use large model atoms?
+.false.     ! PAH_from_RT       : PAH heating from cross-sections?
+.true.      ! Rphoto_from_RT    : calculate photorates from rad. transfer?
+.true.      ! Rphoto_bandint    : use band-integrated photo-rates?
+.true.      ! NewChemScan       : new initial abund. from down-right scan?
+.false.	    ! freeze_RT
+.false.	    ! freeze_Tgas
+.false.	    ! freeze_chemistry
+.false.     ! Textrapolate      : extrapolate T in gas-phase reactions?
+
+------ chi weights ------
+.true.      ! chi_logbin        : using spectral windows to calc CHI_PHOTO?
+0.15        ! weight_PHOTO
+0.35        ! weight_SPITZER
+0.20        ! weight_LINES
+0.25        ! weight_IMAGES
+
+------ start from MCFOST/MCMax? -------------------------------
+***  this is for pure ProDiMo. Invert these 3 options,      ***
+***  and add last line "forProDiMo.fits.gz", if you want to ***
+***  run ProDiMo on top of MCFOST/MCMax                     ***
+---------------------------------------------------------------
+.true.     ! radtrans          : continuum radiative transfer?
+.true.     ! restart           : run from restart?
+.false.    ! readMCFOST        : read from MCFOST/MCMax exchange file? forProDiMo.fits.gz
+

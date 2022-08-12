@@ -1,0 +1,145 @@
+-----------------------------------------
+***  Parameter Input-File for ProDiMo  ***
+------------------------------------------
+1.0              ! Mstar [Msun] : set by evolution
+1.513              ! Lstar       [Lsun] : set by evolution
+4730.0              ! Teff        [K] : set by evolution
+0.06         ! fUV         [-]      : LUV/Lstar
+0.7         ! pUV         [-]      : UV powerlaw exponent
+.true.      ! Xrays              : switch X-rays on?
+2.E+30      ! Xray_Lum           : Xray luminosity[erg/s]
+120.E+6     ! Xray_Temp          : Xray emission temperature [K]
+2.E+29      ! Xray_Lum  [10^30]  : X-ray luminosity (Guedel+2007)
+1.7E-17     ! CRI       [1/s]    : cosmic ray ionisation of H2
+
+------ dust parameters ------
+  5.29550510E-03                   ! amin : set by evolution
+  2.57082603E+03                   ! amax : set by evolution
+  3.59696521E+00                   ! apow : set by evolution
+2           ! settle_method
+  2.27620781E-04               ! a_settle : set by evolution
+0.8         ! hollow_sphere       : max hollow volume ratio
+dust_opacity_list2.txt            ! dust_opacity_list_file
+3           ! NDUST               : number of selected dust species
+  0.604633070301426         Mg0.7Fe0.3SiO3[s]
+  0.145366929698574         amC-Zubko[s]
+  0.25      vacuum[s]
+
+------ PAH parameters ------
+.true.      ! PAH_in_RT
+.false.     ! PAH_from_RT
+.false.     ! UVgasRT
+0.01        ! fPAH
+
+------ gas parameters ------
+0.2         ! ChemHeatFac
+0.1         ! v_turb
+.true.      ! N2_shielding
+.true.      ! UMIST2012
+.true.      ! Eads_from_file      : UMIST adsorption rates from file
+onlyadd     ! handle_UMIST        : handle UMIST-data (erase/overwrite/onlyadd)
+0           ! num_noerase         : exceptions from erasing UMIST data
+
+------ disk shape ------
+.false.     ! solve_diskstruc     : solve the vertical disk structure?
+.false.     ! conserve_pressure   : conserve pgas instead of n<H>?
+.true.      ! MCFOST_LIKE
+2           ! NZONES
+------ outer zone ------
+  3.52501184E-02                  ! Mdisk : set by evolution
+1.e-2       ! dust_to_gas [-]     : the dust-to-gas mass ratio
+  4.63992740E+01                    ! Rin : set by evolution
+200.0       ! Rtaper      [AU]    : tapering-off radius
+400.0       ! Rout        [AU]    : outer disk radius
+1.0         ! epsilon     [-]     : power index of col.dens. as func of r
+-0.8        ! gtaper      [-]     : tapering-off exponent
+100.0       ! MCFOST_RREF
+3.95284597              ! MCFOST_H0 : set by evolution
+  1.12298267E+00            ! MCFOST_BETA : set by evolution
+------ inner disk zone ------
+  2.04871698E-08                 ! M2disk : set by evolution
+1.e-2       ! d2ust_to_gas
+  1.51151515E+00                  ! a2max : set by evolution
+0.1         ! R2in
+10.0        ! R2out
+  1.31414104E+00               ! e2psilon : set by evolution
+1.0         ! MCFOST_R2
+0.106426632              ! MCFOST_H2 : set by evolution
+  1.50000000E+00              ! MCFOST_B2 : set by evolution
+
+------ the big molecules ------
+.false.     ! UV_H2              : electronic levels for H2?
+.false.     ! custom_COrovib
+.true.      ! H2O_rovibration    : big ro-vib H2O models?
+.true.      ! H2O_Daniel2011     : new H2O collision rates
+
+------ dimensions ------
+80          ! NXX
+50	    ! NZZ
+6           ! Ninner
+15          ! NnewWall
+0.7         ! NXratio
+25          ! NLAM
+7           ! NUV
+3           ! N1UV
+.true.      ! refine_Spitzer
+19          ! Ntheta
+11          ! Nphi
+50          ! RTitmax
+5.0         ! tau_cutoff
+
+------ accelerations ------
+.true.      ! parallel_chem
+.false.     ! parallel_debug
+.false.     ! ignore_Tg_midplane
+.true.      ! use_chemsol
+
+------ image and SED parameters ------
+.true.      ! calcSED            : calculate SED and images?
+.true.      ! monoSED            : use monochromatic mode?
+200         ! NlamSED            : number of lambda gridpoints
+0.1         ! lminSED            : minimum lambda[mic]
+10000.0     ! lmaxSED            : minimum lambda[mic]
+157.2              ! dist      [pc]    : distance
+49          ! incl      [deg]    : inclination (0=face-on)
+
+------ line transfer? ------
+.true.      ! line_transfer      : calculate line transfer?
+.false.     ! immediate_lines    : line RT directly after init?
+200         ! line_Ndisk
+301         ! line_image_side_Npix
+
+------ tolerances ------
+0.1         ! tol_convergence   : convergence criterion for global interation
+1.0E-8      ! tol_diskstruc     : rel.&abs. tolerance for vertical disk struc
+1.0E-8      ! temp_precis       : rel. precision in T-determination
+1.0E-9      ! chem_precis       : precision in solve_chemistry
+2.0E-5      ! rtol_chem         : rel. tolerance for advance_chemistry
+1.0E-99     ! atol_chem         : abs. tolerance for advance_chemistry
+10.0        ! cputime_max [s]   : max. CPU time for advance_chemistry
+
+------ switches ------
+0           ! verbose_level     : how much output? (-1...4)
+.false.     ! restart           : restart from checkpoint file?
+.true.      ! solve_temp        : solve the heating/cooling balance?
+.true.      ! radtrans          : calculate dust continuum rad. transfer?
+.true.      ! chi_from_RT       : calculate chi from UV rad. transfer?
+.true.      ! Td_from_RT        : calculate dust temp. from rad. transfer?
+.true.      ! Jback_from_RT     : calculate background Jnu from rad. transfer?
+.true.      ! Rphoto_from_RT    : calculate photorates from rad. transfer?
+.false.     ! Rphoto_bandint    : use band-integrated photo-rates?
+.true.      ! UVpumping         : use large model atoms?
+.true.      ! NewChemScan       : new initial abund. from down-right scan?
+.false.     ! freeze_RT         : freeze radiative transfer results Td/Jv?
+.false.     ! freeze_diskstruc  : freeze density/pressure structure?
+.false.     ! freeze_Tgas       : freeze gas temperature?
+.false.     ! freeze_chemistry  : freeze chemical concentrations?
+.false.     ! chemanalysis
+.false.     ! write_pop
+
+------ chi-weights ------
+.true.      ! chi_logbin          : using spectral windows to calc CHI_PHOTO?
+0.3         ! weight_PHOTO
+1.0         ! weight_SPITZER
+2.0         ! weight_IMAGES
+0.25        ! weight_LINES
