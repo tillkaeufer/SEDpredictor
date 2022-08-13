@@ -6,7 +6,6 @@ if timing:
 import numpy as np
 from tensorflow.keras.models import load_model
 import joblib
-import pickle 
 from PIL import Image
 import altair as alt
 import pandas as pd
@@ -134,178 +133,6 @@ def transform_parameter(name,val):
         dummy[0,pos]=val
         val=scaler.transform(dummy)[0,pos]
         return val,pos
-slider_dict={
-    'Mstar':{
-        'label':r'$log_{10}(M_{star}) [M_{sun}]$',
-        'lims':[-0.69, 0.39],
-        'x0':0.06,
-        'priority':1}
-        ,
-    
-    'Teff':{
-        'label':r'$log_{10}(T_{eff})$',
-        'lims':[3.5, 4.0], 
-        'x0':3.69,
-        'priority':1},
-    
-    'Lstar':{
-        'label':r'$log_{10}(L_{star})$',
-        'lims':[-1.3, 1.7],
-        'x0':0.79,
-        'priority':1}, 
-    'fUV':{
-        'label':r'$log_{10}(fUV)$',
-        'lims':[-3, -1],
-        'x0':-1.57, 
-        'priority':1},
-    
-    'pUV':{
-        'label':r'$log_{10}(pUV)$',
-        'lims':[-0.3, 0.39],
-        'x0':-0.02, 
-        'priority':1},
-    
-    'Mdisk':{
-        'label':r'$log_{10}(M_{disk})$',
-        'lims':[-5, 0],
-        'x0':-1.367, 
-        'priority':2},
-    
-    'incl':{
-        'label':r'$incl [Deg]$',
-        'lims':[0.0, 90.0],
-        'x0':20.0,
-        'priority':2},
-    
-    'Rin':{
-        'label':r'$log_{10}(R_{in}[AU])$',
-        'lims':[-2.00, 2.00], 
-        'x0':-1.34,
-        'priority':2},
-   
-     'Rtaper':{
-        'label':r'$log_{10}(R_{taper}[AU])$',
-        'lims':[0.7, 2.5],
-         'x0':1.95, 
-        'priority':2},
-    
-    'Rout':{
-        'label':r'$log_{10}(R_{out}[AU])$',
-        'lims':[1.3, 3.14],
-        'x0':2.556, 
-        'priority':2},
-    
-    'epsilon':{
-        'label':r'$\epsilon$',
-        'lims':[0, 2.5],
-        'x0':1, 
-        'priority':2},
-    
-    'MCFOST_BETA':{
-        'label':r'$\beta$',
-        'lims':[0.9, 1.4],
-        'x0':1.15, 
-        'priority':2},
-    
-    'MCFOST_H0':{
-        'label':'H_0[AU]',
-        'lims':[3, 35],
-        'x0':12, 
-        'priority':2},    
-    
-    'a_settle':{
-        'label':r'$log_{10}(a_{settle})$',
-        'lims':[-5, -1],
-        'x0':-3, 
-        'priority':3},
-    
-    'amin':{
-        'label':r'$log_{10}(a_{min})$',
-        'lims':[-3, -1],
-        'x0':-1.5, 
-        'priority':3},
-    
-    
-    'amax':{
-        'label':r'$log_{10}(a_{max})$',
-        'lims':[2.48, 4],
-        'x0':3.6, 
-        'priority':3},
-    
-    'apow':{
-        'label':r'$a_{pow}$',
-        'lims':[3, 5],
-        'x0':3.6, 
-        'priority':3},
-    
-    'Mg0.7Fe0.3SiO3[s]':{
-        'label':r'Mg0.7Fe0.3SiO3[s]',
-        'lims':[0.45, 0.7],
-        'x0':0.57, 
-        'priority':3},
-    
-    'amC-Zubko[s]':{
-        'label':r'amC-Zubko[s]',
-        'lims':[0.05, 0.3],
-        'x0':0.18, 
-        'priority':3},
-    
-    'fPAH':{
-        'label':r'$log_{10}(fPAH)$',
-        'lims':[-3.5, 0],
-        'x0':-1.5, 
-        'priority':3},
-    
-    'PAH_charged':{
-        'label':r'PAH_charged',
-        'lims':[0, 1], 
-        'priority':3},
-}
-    
-log_dict={'Mstar': 'log', 'Lstar': 'log', 'Teff': 'log', 'fUV': 'log', 'pUV': 'log', 'amin': 'log', 'amax': 'log',
-      'apow': 'linear', 'a_settle': 'log', 'Mg0.7Fe0.3SiO3[s]': 'linear', 'amC-Zubko[s]': 'linear', 'fPAH': 'log',
-   'PAH_charged': 'linear', 'Mdisk': 'log', 'Rin': 'log', 'Rtaper': 'log', 'Rout': 'log', 'epsilon': 'linear',
-   'MCFOST_H0': 'linear', 'MCFOST_BETA': 'linear', 'incl': 'linear'}#,'Dist[pc]':'linear'}
-for key in log_dict:
-    slider_dict[key]['scale']=log_dict[key]
-    
-for key in slider_dict:
-    if slider_dict[key]['scale']=='log':
-        if 'log' in slider_dict[key]['label']:
-            print(slider_dict[key]['label']+': fine')
-        else:
-            slider_dict[key]['label']='$log('+slider_dict[key]['label'][1:-1]+')$'
-            low=slider_dict[key]['lims'][0]
-            high=slider_dict[key]['lims'][1]
-            slider_dict[key]['lims']=[np.log10(low),np.log10(high)]            
-dist_start=100
-if input_file:
-    with open('Para.in','r') as f:
-        lines=f.readlines()
-        for line in lines:
-            split_line=line.split()
-            value=float(split_line[0])
-            parameter=split_line[1]
-            if parameter in slider_dict.keys():
-                if slider_dict[parameter]['scale']=='log':
-                    value=np.log10(value)
-                slider_dict[parameter]['x0']=value
-                
-            else:
-                if parameter=='Dist[pc]':
-                    dist_start=value
-                if parameter=='E(B-V)':
-                    e_bvstart=value
-                    
-                if parameter=='R(V)':
-                    R_Vstart=value    
-def change_range(ar_val):
-    ax.set_xlim(10**(ar_val))
-    if residual:
-        ax_res.set_xlim(10**ar_val)
-def change_flux(ar_val):
-    ax.set_ylim(10**(ar_val))
-        
 
 def change_dist(dist,data):
     new_data=data*(100/dist)**2
@@ -352,20 +179,203 @@ def main():
         st.markdown("""### Different settings.""")
         fast_plotting=st.checkbox('Simplified faster plotting',value=False)
         observe=st.checkbox('Compare to observation',value=False)
-        residual=st.checkbox('Plot the residual',value=False)
-        chi_on=st.checkbox('Write the Chi-value',value=False)
-        #st.write(chi_on)
-        if chi_on:
-            chi_mode=st.selectbox('Chi-mode', ['DIANA','squared','squared_reduced'])
+        if observe:
+            residual=st.checkbox('Plot the residual',value=True)
+            obj=st.selectbox('Object', ['49Cet','AATau','ABAur','BPTau', 'CITau', 'CYTau','CQTau',
+                                        'DNTau','DFTau','DMTau','DOTau','FTTau','GMAur','HD100546',
+                                        'HD135344B','HD142666','HD163296','HD169142','HD95881','HD97048',
+                                        'LkCa15','MWC480','PDS66','RECX15','RULup','RYLup','TWCha',
+                                        'TWHya','UScoJ1604-2130','V1149Sco'])
+            folder_observation='./Example_observation/'+str(obj)
+            chi_on=st.checkbox('Write the Chi-value',value=False)
+            #st.write(chi_on)
+            if chi_on:
+                chi_mode=st.selectbox('Chi-mode', ['squared','squared_reduced','DIANA'])
 
-        folder_observation='./Example_observation/DNTau'
+        else:
+            residual=False
+            chi_on=False
+
         file_name='SED_to_fit.dat' 
         if observe:
             lam_obs,flux_obs,sig_obs,filer_names,e_bvstart,R_Vstart=load_observations(folder_observation,file_name,dereddening_data=False)
         else:
             e_bvstart=0.1
             R_Vstart=3.1
-
+        dist_start=100
+        use_parafile=st.checkbox('Use your own parameter file',value=False)
+        slider_dict={
+            'Mstar':{
+                'label':r'$log_{10}(M_{star}) [M_{sun}]$',
+                'lims':[-0.69, 0.39],
+                'x0':0.06,
+                'priority':1}
+                ,
+            
+            'Teff':{
+                'label':r'$log_{10}(T_{eff})$',
+                'lims':[3.5, 4.0], 
+                'x0':3.69,
+                'priority':1},
+            
+            'Lstar':{
+                'label':r'$log_{10}(L_{star})$',
+                'lims':[-1.3, 1.7],
+                'x0':0.79,
+                'priority':1}, 
+            'fUV':{
+                'label':r'$log_{10}(fUV)$',
+                'lims':[-3, -1],
+                'x0':-1.57, 
+                'priority':1},
+            
+            'pUV':{
+                'label':r'$log_{10}(pUV)$',
+                'lims':[-0.3, 0.39],
+                'x0':-0.02, 
+                'priority':1},
+            
+            'Mdisk':{
+                'label':r'$log_{10}(M_{disk})$',
+                'lims':[-5, 0],
+                'x0':-1.367, 
+                'priority':2},
+            
+            'incl':{
+                'label':r'$incl [Deg]$',
+                'lims':[0.0, 90.0],
+                'x0':20.0,
+                'priority':2},
+            
+            'Rin':{
+                'label':r'$log_{10}(R_{in}[AU])$',
+                'lims':[-2.00, 2.00], 
+                'x0':-1.34,
+                'priority':2},
+           
+             'Rtaper':{
+                'label':r'$log_{10}(R_{taper}[AU])$',
+                'lims':[0.7, 2.5],
+                 'x0':1.95, 
+                'priority':2},
+            
+            'Rout':{
+                'label':r'$log_{10}(R_{out}[AU])$',
+                'lims':[1.3, 3.14],
+                'x0':2.556, 
+                'priority':2},
+            
+            'epsilon':{
+                'label':r'$\epsilon$',
+                'lims':[0, 2.5],
+                'x0':1, 
+                'priority':2},
+            
+            'MCFOST_BETA':{
+                'label':r'$\beta$',
+                'lims':[0.9, 1.4],
+                'x0':1.15, 
+                'priority':2},
+            
+            'MCFOST_H0':{
+                'label':'H_0[AU]',
+                'lims':[3, 35],
+                'x0':12, 
+                'priority':2},    
+            
+            'a_settle':{
+                'label':r'$log_{10}(a_{settle})$',
+                'lims':[-5, -1],
+                'x0':-3, 
+                'priority':3},
+            
+            'amin':{
+                'label':r'$log_{10}(a_{min})$',
+                'lims':[-3, -1],
+                'x0':-1.5, 
+                'priority':3},
+            
+            
+            'amax':{
+                'label':r'$log_{10}(a_{max})$',
+                'lims':[2.48, 4],
+                'x0':3.6, 
+                'priority':3},
+            
+            'apow':{
+                'label':r'$a_{pow}$',
+                'lims':[3, 5],
+                'x0':3.6, 
+                'priority':3},
+            
+            'Mg0.7Fe0.3SiO3[s]':{
+                'label':r'Mg0.7Fe0.3SiO3[s]',
+                'lims':[0.45, 0.7],
+                'x0':0.57, 
+                'priority':3},
+            
+            'amC-Zubko[s]':{
+                'label':r'amC-Zubko[s]',
+                'lims':[0.05, 0.3],
+                'x0':0.18, 
+                'priority':3},
+            
+            'fPAH':{
+                'label':r'$log_{10}(fPAH)$',
+                'lims':[-3.5, 0],
+                'x0':-1.5, 
+                'priority':3},
+            
+            'PAH_charged':{
+                'label':r'PAH_charged',
+                'lims':[0, 1], 
+                'priority':3},
+        }
+            
+        log_dict={'Mstar': 'log', 'Lstar': 'log', 'Teff': 'log', 'fUV': 'log', 'pUV': 'log', 'amin': 'log', 'amax': 'log',
+              'apow': 'linear', 'a_settle': 'log', 'Mg0.7Fe0.3SiO3[s]': 'linear', 'amC-Zubko[s]': 'linear', 'fPAH': 'log',
+           'PAH_charged': 'linear', 'Mdisk': 'log', 'Rin': 'log', 'Rtaper': 'log', 'Rout': 'log', 'epsilon': 'linear',
+           'MCFOST_H0': 'linear', 'MCFOST_BETA': 'linear', 'incl': 'linear'}#,'Dist[pc]':'linear'}
+        for key in log_dict:
+            slider_dict[key]['scale']=log_dict[key]
+            
+        for key in slider_dict:
+            if slider_dict[key]['scale']=='log':
+                if 'log' in slider_dict[key]['label']:
+                    print(slider_dict[key]['label']+': fine')
+                else:
+                    slider_dict[key]['label']='$log('+slider_dict[key]['label'][1:-1]+')$'
+                    low=slider_dict[key]['lims'][0]
+                    high=slider_dict[key]['lims'][1]
+                    slider_dict[key]['lims']=[np.log10(low),np.log10(high)]            
+        dist_start=100
+        if use_parafile:
+            ispara_file=st.file_uploader('Parameter file',type='txt')
+            if ispara_file is not None:
+                lines=ispara_file.getvalue().splitlines()
+                #here I have to work on!!
+                for line in lines:
+#                    st.write(line)
+                    split_line=line.split()
+                    value=float(split_line[0])
+                    parameter=split_line[1].decode('ascii')
+                   # print(parameter,value)
+                 
+                    if parameter in slider_dict.keys():
+                        if slider_dict[parameter]['scale']=='log':
+                            value=np.log10(value)
+                        slider_dict[parameter]['x0']=value
+                        
+                    else:
+                        if parameter=='Dist[pc]':
+                            dist_start=value
+                        if parameter=='E(B-V)':
+                            e_bvstart=value
+                            
+                        if parameter=='R(V)':
+                            R_Vstart=value  
+        
+        #print(slider_dict)
         st.markdown('---')
         if timing:
             start=time()
@@ -408,8 +418,8 @@ def main():
 
 
         #distance
-        dist_start=float(st.sidebar.text_input('Distance [pc]',value=100))
-
+        dist_start=float(st.sidebar.text_input('Distance [pc]',value=dist_start))
+        
 
         st.sidebar.markdown('---')
 
@@ -473,27 +483,12 @@ def main():
         data=change_dist(dist_start,data)
         if not dereddeningdata:
             #reddening
+            print(e_bvstart,R_Vstart)
             data=reddening(wavelength,data,e_bvstart,R_Vstart)
         if timing:
             end=time()
             pred_time=end-start
         str_title=''
-        if knn_switch:
-            error_knn=knn.predict(features)
-            higher, =ax.plot(wavelength,10**(np.log10(data)+Knn_factor*error_knn[0]),color='grey',alpha=1)
-            lower, =ax.plot(wavelength,10**(np.log10(data)-Knn_factor*error_knn[0]),color='grey',alpha=1)
-            dist,neighbor_ar=knn.kneighbors(features)
-            min_dist,mean_dist,max_dist=np.min(dist)/min_sample,np.mean(dist)/mean_sample,np.max(dist)/max_sample
-            txt=''
-            if mean_dist<=1.0:
-                colortitle='tab:green'
-            elif 1.0<=mean_dist<=2.0:
-                colortitle='tab:orange'
-            elif 1.5<=mean_dist:
-                colortitle='tab:red'
-                txt='Warning!! Few models! '
-            str_title=txt+'Distance to neighbors (average=1): Minimum %4.2f, Mean %4.2f, Maximum %4.2f' %(min_dist,mean_dist,max_dist)
-            ax.set_title(str_title,color=colortitle,fontsize=12)
         if calc_mdisk:
             m_disk=calc_mass(data)
             rat_mass=m_disk/init_mass
