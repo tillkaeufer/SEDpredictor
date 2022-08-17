@@ -164,10 +164,12 @@ def main():
     <br><br/>
     This tool predictions SEDs of protoplanetary disk using neural networks.
     <br/>
-    If this tool is useful to your work, please cite (here paperlink)
+    If this tool is useful to your work, please cite (Kaeufer et al., in prep)
     """
     , unsafe_allow_html=True)
     should_tell_me_more = st.button('Tell me more')
+    
+    st.warning('This website is just in the making, so be careful.')
     
     if should_tell_me_more:
         tell_me_more()
@@ -381,8 +383,8 @@ def main():
             start=time()
 
         questions = {
-        'Complexity': ['Single zone', 'Two-zone'], 
-        'Two-zone flavor': ['discontinues', 'continues','smooth'],
+     #   'Complexity': ['Single zone', 'Two-zone'], 
+     #   'Two-zone flavor': ['discontinues', 'continues','smooth'],
         'Input version':['Slider','Text only']}
   
         st.sidebar.markdown('# Create your disk')
@@ -415,10 +417,12 @@ def main():
         else:
             fig, ax = plt.subplots(figsize=(12,9))
 
+        st.sidebar.markdown('---')
 
 
         #distance
-        dist_start=float(st.sidebar.text_input('Distance [pc]',value=dist_start))
+        st.sidebar.write('Distance [pc]')
+        dist_start=float(st.sidebar.text_input(label='',value=dist_start,key='dist'))
         
 
         st.sidebar.markdown('---')
@@ -428,6 +432,7 @@ def main():
         features=np.zeros((1,len(header)))
         if timing:
             start2=time()
+        c=0
         for key in header:
             #print(key)name=slider_dict[key]['label']
             mini,maxi=slider_dict[key]['lims']
@@ -443,22 +448,26 @@ def main():
                 with col2:
                     middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
                 if 'log' in name:
-                    
-                    middle=st.sidebar.text_input(name[10:-2],value=float(np.round(10**middle,4)))#
+                    middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,4)),key=c)#
                     middle=np.log10(float(middle))
+                    c+=1       
+    
                 else:
-                    middle=st.sidebar.text_input(name,value=float(middle)) #name
-
-            
+                    middle=st.sidebar.text_input(label='',value=float(middle),key=c) #name
+                    c+=1
+                print(c)
                 st.sidebar.markdown('---')
             else:
                 
+                st.sidebar.write(name)
                 if 'log' in name:
                     
-                    middle=st.sidebar.text_input(name[5:-2],value=float(np.round(10**value,4)))
+                    middle=st.sidebar.text_input(label='',value=float(np.round(10**value,4)),key=c)
                     middle=np.log10(float(middle))
                 else:
-                    middle=st.sidebar.text_input(name,value=float(value))
+                    middle=st.sidebar.text_input(label='',value=float(value),key=c)
+                c+=1
+                
             if timing:
                 end=time()
                 sidebar_time=end-start
@@ -609,7 +618,7 @@ st.set_page_config(
 #@st.cache
 
 def tell_me_more():
-    st.title('Backgground')
+    st.title('Background')
 
     st.button('Back to SED predictions')  # will change state and hence trigger rerun and hence reset should_tell_me_more
 
