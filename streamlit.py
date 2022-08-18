@@ -378,7 +378,6 @@ def main():
                             R_Vstart=value  
         
         #print(slider_dict)
-        st.markdown('---')
         if timing:
             start=time()
 
@@ -525,16 +524,35 @@ def main():
             st.altair_chart(alt_chart)
         
         else:
-        
+            
+            
             l, = ax.plot(t, s,marker='+',linestyle='none')
 
 
-            lam_min,lam_max=np.min(wavelength),10**3
-            flux_min,flux_max=10**-12,10**-7
-            if observe:
-                lam_min,lam_max=np.min(lam_obs)*0.9,np.max(lam_obs)*1.1
-                flux_min,flux_max=10**(int(np.min(np.log10(flux_obs))-1)), 10**(int(np.max(np.log10(flux_obs))+1))
+            #slider to adjust the x and y axis
+            lam_min_start,lam_max_start=np.min(wavelength),10**3
+            flux_min_start,flux_max_start=10**-12,10**-7
+            
+            adjust_limits=False
+            adjust_limits=st.checkbox('Adjust plot limits',value=False)
 
+            
+            if observe:
+                lam_min_start,lam_max_start=np.min(lam_obs)*0.9,np.max(lam_obs)*1.1
+                flux_min_start,flux_max_start=10**(int(np.min(np.log10(flux_obs))-1)), 10**(int(np.max(np.log10(flux_obs))+1))
+            if adjust_limits:
+                lam_min=float(st.text_input(label='Minimal wavelength',value=lam_min_start,key='lam_min'))
+                lam_max=float(st.text_input(label='Maximal wavelength',value=lam_max_start,key='lam_max'))
+                flux_min=float(st.text_input(label='Minimal SED value',value=flux_min_start,key='flux_min'))
+                flux_max=float(st.text_input(label='Maximal SED value',value=flux_max_start,key='flux_max'))
+            else:
+                lam_min=lam_min_start
+                lam_max=lam_max_start
+                flux_min=flux_min_start
+                flux_max=flux_max_start
+                
+                
+            st.markdown('---')
             ax.axis([lam_min,lam_max ,flux_min,flux_max])
 
 
