@@ -101,11 +101,13 @@ for line in lines[1:]:
     txt=txt+line.strip()+' '  
 txt=txt[1:-2].split()
 wavelength=np.array(txt,'float64')
-  
-    
-model_star=load_model(f'{path_data}/StarNets/{star_name}.h5')
-input_scaler=joblib.load(f'{path_data}/scaler/{star_name}_input_scaler.save')
-output_scaler=joblib.load(f'{path_data}/scaler/{star_name}_output_scaler.save')
+#@st.cache(suppress_st_warning=True)  
+def load_nn_and_scaler_star(path_data,star_name):    
+    model_star=load_model(f'{path_data}/StarNets/{star_name}.h5')
+    input_scaler=joblib.load(f'{path_data}/scaler/{star_name}_input_scaler.save')
+    output_scaler=joblib.load(f'{path_data}/scaler/{star_name}_output_scaler.save')
+    return model_star,input_scaler,output_scaler
+model_star,input_scaler,output_scaler=load_nn_and_scaler_star(path_data,star_name)
 
 def calculate_mstar(Teff,Lstar):
     trans_star=input_scaler.transform(np.expand_dims([Teff,Lstar],axis=0))
@@ -426,6 +428,19 @@ def main():
 
         st.sidebar.markdown('---')
 
+        st.sidebar.write('Reddening')
+        
+        st.sidebar.write('$e(B-V)$')
+        e_bvstart=float(st.sidebar.text_input(label='',value=e_bvstart,key='ebv'))
+        
+    
+        st.sidebar.write('$R_V$')
+        R_Vstart=float(st.sidebar.text_input(label='',value=R_Vstart,key='rv'))
+        
+    
+        st.sidebar.markdown('---')
+
+
         plt.subplots_adjust(left=0.2, bottom=0.41, top=0.95)
 
         features=np.zeros((1,len(header)))
@@ -624,7 +639,22 @@ def main():
                 st.write(' ')
                 st.write('Total time: '+str(np.round(tot_time,2))+'s')
             st.success('Successfully predicted the SED')
-
+            st.markdown('----')
+            exp_para=st.checkbox(label='Export Parameters',value=False)
+            if exp_para:
+                st.warning('This feature does not work yet.')
+                print('export model parameters')
+            #exp_sed=st.checkbox(label='Export model SED',value=False)
+            #if exp_sed:
+                #print('export SED')
+            un_fac=0.05
+            sed_string='lam[mic] nuF[erg/cm^2/s] sigma \n'
+            for i in range(len(wavelength)):
+                lam_1,flux_1,sig_1=wavelength[i],data[i],data[i]*un_fac
+                sed_string=sed_string+ '%12.6e %12.6e %12.6e \n'%(lam_1,flux_1,sig_1)
+            
+            st.download_button('Download SED file', sed_string,'SED_model.txt')
+                                
 st.set_page_config(
     layout="wide",
     page_title='SED predictor',
