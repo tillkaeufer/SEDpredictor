@@ -84,7 +84,7 @@ if timing:
     start=time()
 #load NN
 
-@st.cache(suppress_st_warning=True)  
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def load_data(path_data,name, delete_derived_paras=True):
     scaler=joblib.load(f'{path_data}/scaler/{name}_para_scaler.save')
     y_scaler=joblib.load(f'{path_data}/scaler/{name}_sed_scaler.save')
