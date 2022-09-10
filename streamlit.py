@@ -116,7 +116,7 @@ def load_data(path_data,name, delete_derived_paras=True):
 scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,name=name)
 
 
-@st.cache(suppress_st_warning=True)  
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def load_nn_and_scaler_star(path_data,star_name):    
     model_star=load_model(f'{path_data}/StarNets/{star_name}.h5')
     input_scaler=joblib.load(f'{path_data}/scaler/{star_name}_input_scaler.save')
