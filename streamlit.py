@@ -43,13 +43,21 @@ from scipy import interpolate
 from PyAstronomy import pyasl
 from observation import load_observations
 from chi_computations import chi_window,chi_squared,chi_squared_reduced
-from para_transform import para_to_parameterin
-from rout import adjust_rout
+#from para_transform import para_to_parameterin
+#from rout import adjust_rout
 
 import streamlit as st
 
 #image icon
 im = Image.open("icon.png")
+
+                                
+st.set_page_config(
+    layout="wide",
+    page_title='SED predictor',
+    page_icon=im
+
+)
 
 
 name='single_45_rinlog' # what network to use
@@ -75,33 +83,40 @@ calc_mdisk=False
 if timing:
     start=time()
 #load NN
-scaler=joblib.load(f'{path_data}/scaler/{name}_para_scaler.save')
-y_scaler=joblib.load(f'{path_data}/scaler/{name}_sed_scaler.save')
-model_saved=load_model(f'{path_data}/NeuralNets/{name}.h5')
-    
-header_start=np.load(f'{path_data}/header.npy')
-header_start=np.concatenate((header_start,['incl']),axis=0)
 
-delete_derived_paras=True
-if delete_derived_paras:
-    list_derived=['Mstar', 'amC-Zubko[s]', 'Rout']
-    len_new_header=len(header_start)-len(list_derived)
-    new_header_1=[]
-    i_list=[]
-    for i in range(len(header_start)):
-        if header_start[i] not in list_derived:
-            new_header_1.append(header_start[i])
-            i_list.append(i)
-    header=np.asarray(new_header_1)
-txt=str()
-with open(f'{path_data}/wavelength.out','r') as f:
-    lines=f.readlines()
-for line in lines[1:]:
+@st.cache(suppress_st_warning=True)  
+def load_data(path_data,name, delete_derived_paras=True):
+    scaler=joblib.load(f'{path_data}/scaler/{name}_para_scaler.save')
+    y_scaler=joblib.load(f'{path_data}/scaler/{name}_sed_scaler.save')
+    model_saved=load_model(f'{path_data}/NeuralNets/{name}.h5')
+        
+    header_start=np.load(f'{path_data}/header.npy')
+    header_start=np.concatenate((header_start,['incl']),axis=0)
+
+    if delete_derived_paras:
+        list_derived=['Mstar', 'amC-Zubko[s]', 'Rout']
+        new_header_1=[]
+        i_list=[]
+        for i in range(len(header_start)):
+            if header_start[i] not in list_derived:
+                new_header_1.append(header_start[i])
+                i_list.append(i)
+        header=np.asarray(new_header_1)
     
-    txt=txt+line.strip()+' '  
-txt=txt[1:-2].split()
-wavelength=np.array(txt,'float64')
-#@st.cache(suppress_st_warning=True)  
+    txt=str()
+    with open(f'{path_data}/wavelength.out','r') as f:
+        lines=f.readlines()
+    for line in lines[1:]:
+        
+        txt=txt+line.strip()+' '  
+    txt=txt[1:-2].split()
+    wavelength=np.array(txt,'float64')
+    return  scaler, y_scaler, model_saved, header, wavelength
+
+scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,name=name)
+
+
+@st.cache(suppress_st_warning=True)  
 def load_nn_and_scaler_star(path_data,star_name):    
     model_star=load_model(f'{path_data}/StarNets/{star_name}.h5')
     input_scaler=joblib.load(f'{path_data}/scaler/{star_name}_input_scaler.save')
@@ -203,9 +218,8 @@ def main():
         file_name='SED_to_fit.dat' 
         if observe:
             lam_obs,flux_obs,sig_obs,filer_names,e_bvstart,R_Vstart=load_observations(folder_observation,file_name,dereddening_data=False)
-        else:
-            e_bvstart=0.1
-            R_Vstart=3.1
+        e_bvstart=0.1
+        R_Vstart=3.1
         dist_start=100
         use_parafile=st.checkbox('Use your own parameter file',value=False)
         slider_dict={
@@ -345,9 +359,9 @@ def main():
             
         for key in slider_dict:
             if slider_dict[key]['scale']=='log':
-                if 'log' in slider_dict[key]['label']:
-                    print(slider_dict[key]['label']+': fine')
-                else:
+                if 'log' not in slider_dict[key]['label']:
+                    #print(slider_dict[key]['label']+': fine')
+                #else:
                     slider_dict[key]['label']='$log('+slider_dict[key]['label'][1:-1]+')$'
                     low=slider_dict[key]['lims'][0]
                     high=slider_dict[key]['lims'][1]
@@ -408,7 +422,6 @@ def main():
 
         st.sidebar.markdown("## " + 'Parameters'.capitalize())
 
-        color_list=['bisque','lightsteelblue', 'lightgreen','lightgoldenrodyellow','skyblue','lightgrey']
 
         #fig,ax = plt.figure(figsize=(9,9))
         if observe and residual:
@@ -469,7 +482,7 @@ def main():
                 else:
                     middle=st.sidebar.text_input(label='',value=float(middle),key=c) #name
                     c+=1
-                print(c)
+                #print(c)
                 st.sidebar.markdown('---')
             else:
                 
@@ -506,7 +519,7 @@ def main():
         data=change_dist(dist_start,data)
         if not dereddeningdata:
             #reddening
-            print(e_bvstart,R_Vstart)
+            #print(e_bvstart,R_Vstart)
             data=reddening(wavelength,data,e_bvstart,R_Vstart)
         if timing:
             end=time()
@@ -525,7 +538,7 @@ def main():
             df_array=np.concatenate((np.expand_dims(wavelength,axis=0),np.expand_dims(data,axis=0)),axis=0).T
 
             df=pd.DataFrame(df_array,columns=['lambda','SED'])
-            print(df.shape)
+            #print(df.shape)
 
             alt_chart=alt.Chart(df).mark_point().encode(
                 x=alt.X('lambda',scale=alt.Scale(type="log")),y=alt.Y('SED',scale=alt.Scale(type="log")),
@@ -623,7 +636,7 @@ def main():
                 end=time()
                 plot_time=end-start
                 start=time()
-            st.pyplot(fig)
+            st.pyplot(fig)#,clear_figure=True)
             if timing:
                 end=time()
                 loadplot_time=end-start
@@ -643,7 +656,7 @@ def main():
             exp_para=st.checkbox(label='Export Parameters',value=False)
             if exp_para:
                 st.warning('This feature does not work yet.')
-                print('export model parameters')
+                #print('export model parameters')
             #exp_sed=st.checkbox(label='Export model SED',value=False)
             #if exp_sed:
                 #print('export SED')
@@ -654,13 +667,7 @@ def main():
                 sed_string=sed_string+ '%12.6e %12.6e %12.6e \n'%(lam_1,flux_1,sig_1)
             
             st.download_button('Download SED file', sed_string,'SED_model.txt')
-                                
-st.set_page_config(
-    layout="wide",
-    page_title='SED predictor',
-    page_icon=im
 
-)
 
         
 #@st.cache
