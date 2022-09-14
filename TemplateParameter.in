@@ -1,0 +1,134 @@
+-------------------------------------------------------------
+***  standard DIANA parameter input-file for ProDiMo      ***
+***  works with small and large DIANA chemical standards  ***
+-------------------------------------------------------------
+
+----- star and irradiation -----
+1.255       ! Mstar       [Msun]  : to change #0
+1.44984     ! Lstar       [Lsun]  : to change from M and Age (#0,1)
+5206.0      ! Teff        [K]     : to change from M and Age (#0,1)
+0.028       ! fUV         [-]     : LUV/Lstar #2 and #20
+1.05        ! pUV         [-]     : UV powerlaw exponent #3 #19
+.false.      ! Xrays       [-]     : no influence on PtoMC
+1.E+30      ! Xray_Lum    [erg/s] : no influence on PtoMC
+2.E+7       ! Xray_Temp   [K]     : no influence on PtoMC
+1.7E-17     ! CRI         [1/s]   : fixed
+1.0         ! CHI_ISM     [-]     : always the same
+
+------ dust parameters ------
+  5.73241957E-02                   ! amin : to change #4 #21
+  3.32312558E+03                   ! amax : to change #5 #18
+  3.40897317E+00                   ! apow : to change # 6 #29
+2           ! settle_method       : always the same
+  3.62996988E-04               ! a_settle : to change  # 8 #26
+0.8         ! hollow_sphere       : always the same
+dust_opacity_list2.txt            ! dust_opacity_list_file
+100         ! NSIZE               : number of dust size bins
+3           ! NDUST               : always the same
+  0.531563344816479         Mg0.7Fe0.3SiO3[s]
+  0.230099655183521         amC-Zubko[s]
+  0.25      vacuum[s]
+
+------ PAH parameters ------
+.true.     ! PAH_in_RT            : are PAH opacities included in rad.trans.?
+.true.      ! PAH_from_RT         : PAH heating from cross-sections?
+0.01        ! fPAH        [-]     : to change #9 #28
+0.5         ! PAH_charged         : to change #10
+
+------ gas parameters ------
+0.2         ! ChemHeatFac [-]     : efficiency of chemical heating
+0.15        ! v_turb      [km/s]  : turbulent Doppler width
+.true.      ! Eads_from_file      : from AdsorptionEnergies.in
+.true.      ! UMIST2012
+onlyadd     ! handle_UMIST        : handle UMIST-data (erase/overwrite/onlyadd)
+0           ! num_noerase         : exceptions from erasing UMIST data
+
+------ disk shape ------
+.false.     ! solve_diskstruc     : solve the vertical hydrostatic eq.?
+.true.      ! MCFOST_LIKE         : parametric disk structure like in MCFOST?
+1						! NZONES
+100        ! MCFOST_RREF [AU]    : ... belonging to reference radius
+1.E-02            ! dust_to_gas : fixed
+
+------ outer zone -------	
+  7.48516105E-03                  ! Mdisk : to change #11 #30
+.false.     ! soft_edges          : add confining boundary layers?
+  1.56378944E+00                    ! Rin : to change #12 #17
+  4.05000000E+01                 ! Rtaper : to change #13 #25
+  2.20000000E+02                   ! Rout : 4 times Rtaper
+  1.18038095E+00                ! epsilon : to change #14 #24
+  7.06275293E+00              ! MCFOST_H0 : to change #15 #23
+  1.24884879E+00            ! MCFOST_BETA : to change #16 #22
+
+
+------ the big molecules -------------------------------
+.true.      ! H2O_rovibration     : big ro-vib H2O models?
+.true.      ! H2O_Daniel2011      : new H2O collision rates
+
+------ dimensions ------
+120         ! NXX    (increase to ~150 for publications!)
+120         ! NZZ    (increase to ~100 for publications!)
+10          ! Ninner
+15          ! NnewWall
+25          ! NLAM
+.true.      ! refine_Spitzer
+9           ! NUV
+3           ! N1UV
+19          ! Ntheta
+11          ! Nphi
+50          ! RTitmax
+3.0         ! tau_cutoff
+
+------ accelerations ------
+.true.      ! parallel_chem
+.false.     ! parallel_debug
+.false.     ! ignore_Tg_midplane
+.true.      ! use_chemsol
+
+------ image and SED parameters ------
+.true.      ! calcSED           : calculate SED and images?
+.true.      ! monoSED           : use monochromatic mode?
+300         ! NlamSED           : number of lambda gridpoints
+0.01      ! lminSED           : minimum lambda[mic]
+13000.0     ! lmaxSED           : minimum lambda[mic]
+100.00       ! dist      [pc]    : distance GAIA DR2
+31.0        ! incl      [deg]   : wolff+2016
+.false.     ! compute_visibilities
+
+------ line transfer? ------
+.true.      ! line_transfer     : calculate line transfer?
+.false.     ! write_pop         : write output for immediate line transfer?
+.false.     ! immediate_lines   : line RT directly after init?
+.false.     ! line_cube         : 3D-line cube output?
+.false.     ! FLiTs             : want to run FLiTs afterwards?
+300         ! line_Ndisk
+144         ! line_Ntheta
+
+------ tolerances ------
+0.05        ! tol_convergence   : convergence criterion for global interation
+1.0E-8      ! tol_diskstruc     : rel.&abs. tolerance for vertical disk struc
+1.0E-8      ! temp_precis       : rel. precision in T-determination
+1.0E-9      ! chem_precis       : precision in solve_chemistry
+2.0E-5      ! rtol_chem         : rel. tolerance for advance_chemistry
+1.0E-99     ! atol_chem         : abs. tolerance for advance_chemistry
+20.0        ! cputime_max [s]   : max. CPU time for advance_chemistry
+
+------ switches ------
+.true.      ! write_fits_binary : use fits format for Mie and restart output
+0           ! verbose_level     : how much output? (-1...4)
+.true.      ! solve_temp        : solve the heating/cooling balance?
+.false.     ! restart           : run from restart?
+.true.      ! radtrans          : continuum radiative transfer?
+.true.      ! chi_from_RT       : calculate chi from UV rad. transfer?
+.true.      ! Td_from_RT        : calculate dust temp. from rad. transfer?
+.true.      ! Jback_from_RT     : calculate background Jnu from rad. transfer?
+.true.      ! Rphoto_from_RT    : calculate photorates from rad. transfer?
+.false.     ! Rphoto_bandint    : use band-integrated photo-rates?
+.true.      ! UVpumping         : use large model atoms?
+.true.      ! Textrapolate      : extrapolate T in gas-phase reactions?
+.true.      ! NewChemScan       : new initial abund. from down-right scan?
+.false.     ! freeze_RT         : freeze radiative transfer results Td/Jv?
+.false.     ! freeze_diskstruc  : freeze density/pressure structure?
+.false.     ! freeze_Tgas       : freeze gas temperature?
+.false.     ! freeze_chemistry  : freeze chemical concentrations?
+

@@ -47,6 +47,7 @@ from chi_computations import chi_window,chi_squared,chi_squared_reduced
 #from rout import adjust_rout
 
 import streamlit as st
+para_dict={}
 
 #image icon
 im = Image.open("icon.png")
@@ -83,6 +84,53 @@ calc_mdisk=False
 if timing:
     start=time()
 #load NN
+
+def para_to_parameterin(input_string):
+    para_dict={}
+    lines=input_string.split('\n')
+    for line in lines:
+        print(line)
+        split_line=line.split()
+        value=float(split_line[0])
+        print(value,split_line)
+        parameter=split_line[1]
+        para_dict[parameter]=value
+    with open('TemplateParameter.in','r') as f_temp:
+        lines=f_temp.readlines()
+    new_lines=''
+    for line in lines:
+        if '!' in line:
+            idx=line.index('!')
+            #print(idx)
+            if 'dist' in line:
+                value=para_dict['Dist[pc]']
+                new_line=f'%12.5e {line[idx:]}' %value
+            else:
+                for key in para_dict.keys():
+                    if key in line:
+                        if key=='Rout':
+                            value=4*para_dict['Rtaper']
+                            new_line=f'%12.5e {line[idx:]}' %value
+
+                        else:
+                            value=para_dict[key]
+                            new_line=f'%12.5e {line[idx:]}' %value
+                            break
+                    else:
+                        new_line=line
+        else:
+            if 'Mg0.7Fe0.3SiO3[s]' in line:
+                idx=line.index('Mg')
+                new_line=f'%12.5e {line[idx:]}' %value
+            if 'amC-Zubko[s]' in line:
+                idx=line.index('amC-Zubko[s]')
+                new_line=f'%12.5e {line[idx:]}' %value
+            else:
+                new_line=line
+        #print(new_line)
+        new_lines=new_lines+new_line     
+    return new_lines
+
 
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def load_data(path_data,name, delete_derived_paras=True):
@@ -655,18 +703,38 @@ def main():
             st.markdown('----')
             exp_para=st.checkbox(label='Export Parameters',value=False)
             if exp_para:
-                st.warning('This feature does not work yet.')
+                exp_features=scaler.inverse_transform(features)
+                print(np.shape(exp_features),np.shape(header))
+                para_string=''
+                for i in range(len(header)):
+                    if log_dict[header[i]]=='log':
+                        exp_features[:,i]=10**(exp_features[:,i])
+                    val=exp_features[0,i]
+                    individual_string='%12.5e ' %val
+                    individual_string= individual_string +' ' + header[i]+ '\n'
+                    para_string=para_string+individual_string
+                para_string=para_string+ str(e_bvstart)+' E(B-V) \n'
+                para_string=para_string+ str(R_Vstart)+' R(V) \n'
+                para_string=para_string+ str(dist_start)+' Dist[pc]'
+                
+                print(para_string)
+                st.download_button('Download Parameter file [can be used for upload]', para_string,'Input.txt')
+                
+                parameterin_string=para_to_parameterin(para_string)
+                st.download_button('Download Parameter file [in ProDiMo format]', parameterin_string,'Parameter.in')
+
+
                 #print('export model parameters')
-            #exp_sed=st.checkbox(label='Export model SED',value=False)
-            #if exp_sed:
+            exp_sed=st.checkbox(label='Export model SED',value=False)
+            if exp_sed:
                 #print('export SED')
-            un_fac=0.05
-            sed_string='lam[mic] nuF[erg/cm^2/s] sigma \n'
-            for i in range(len(wavelength)):
-                lam_1,flux_1,sig_1=wavelength[i],data[i],data[i]*un_fac
-                sed_string=sed_string+ '%12.6e %12.6e %12.6e \n'%(lam_1,flux_1,sig_1)
-            
-            st.download_button('Download SED file', sed_string,'SED_model.txt')
+                un_fac=0.05
+                sed_string='lam[mic] nuF[erg/cm^2/s] sigma \n'
+                for i in range(len(wavelength)):
+                    lam_1,flux_1,sig_1=wavelength[i],data[i],data[i]*un_fac
+                    sed_string=sed_string+ '%12.6e %12.6e %12.6e \n'%(lam_1,flux_1,sig_1)
+                
+                st.download_button('Download SED file', sed_string,'SED_model.txt')
 
 
         
