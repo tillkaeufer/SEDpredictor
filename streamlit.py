@@ -290,13 +290,13 @@ def main():
                 'x0':0.79,
                 'priority':1}, 
             'fUV':{
-                'label':r'$log_{10}(fUV)$',
+                'label':r'$log_{10}(f_{UV})$',
                 'lims':[-3, -1],
                 'x0':-1.57, 
                 'priority':1},
             
             'pUV':{
-                'label':r'$log_{10}(pUV)$',
+                'label':r'$log_{10}(p_{UV})$',
                 'lims':[-0.3, 0.39],
                 'x0':-0.02, 
                 'priority':1},
@@ -344,7 +344,7 @@ def main():
                 'priority':2},
             
             'MCFOST_H0':{
-                'label':'H_0[AU]',
+                'label':'$H_0[AU]$',
                 'lims':[3, 35],
                 'x0':12, 
                 'priority':2},    
@@ -387,13 +387,13 @@ def main():
                 'priority':3},
             
             'fPAH':{
-                'label':r'$log_{10}(fPAH)$',
+                'label':r'$log_{10}(f_{PAH})$',
                 'lims':[-3.5, 0],
                 'x0':-1.5, 
                 'priority':3},
             
             'PAH_charged':{
-                'label':r'PAH_charged',
+                'label':r'$PAH_{charged}$',
                 'lims':[0, 1], 
                 'priority':3},
         }
@@ -491,7 +491,7 @@ def main():
 
         st.sidebar.write('Reddening')
         
-        st.sidebar.write('$e(B-V)$')
+        st.sidebar.write('$E_{BV}$')
         e_bvstart=float(st.sidebar.text_input(label='',value=e_bvstart,key='ebv'))
         
     
@@ -519,6 +519,7 @@ def main():
             if input_version=='Slider':
                 col1,col2=st.sidebar.columns([1,1])
                 with col1:
+                    
                     st.sidebar.write(name)
                 with col2:
                     middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
@@ -533,8 +534,12 @@ def main():
                 #print(c)
                 st.sidebar.markdown('---')
             else:
-                
-                st.sidebar.write(name)
+                if 'log' in name:
+                    name_withoutlog='$'+name[10:-2]+'$'
+                    
+                    st.sidebar.write(name_withoutlog)
+                else:
+                    st.sidebar.write(name)
                 if 'log' in name:
                     
                     middle=st.sidebar.text_input(label='',value=float(np.round(10**value,4)),key=c)
