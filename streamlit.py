@@ -493,14 +493,43 @@ def main():
             start=time()
         t=wavelength
         s = data
+        
+
+        #slider to adjust the x and y axis
+        lam_min_start,lam_max_start=np.min(wavelength),10**3
+        flux_min_start,flux_max_start=10**-12,10**-7
+        
+        adjust_limits=False
+        adjust_limits=st.checkbox('Adjust plot limits',value=False)
+
+        
+        if observe:
+            lam_min_start,lam_max_start=np.min(lam_obs)*0.9,np.max(lam_obs)*1.1
+            flux_min_start,flux_max_start=10**(int(np.min(np.log10(flux_obs))-1)), 10**(int(np.max(np.log10(flux_obs))+1))
+        if adjust_limits:
+            lam_min=float(st.text_input(label='Minimal wavelength',value=lam_min_start,key='lam_min'))
+            lam_max=float(st.text_input(label='Maximal wavelength',value=lam_max_start,key='lam_max'))
+            flux_min=float(st.text_input(label='Minimal SED value',value=flux_min_start,key='flux_min'))
+            flux_max=float(st.text_input(label='Maximal SED value',value=flux_max_start,key='flux_max'))
+        else:
+            lam_min=lam_min_start
+            lam_max=lam_max_start
+            flux_min=flux_min_start
+            flux_max=flux_max_start
+            
+            
+        st.markdown('---')
+        
         if fast_plotting:
             df_array=np.concatenate((np.expand_dims(wavelength,axis=0),np.expand_dims(data,axis=0)),axis=0).T
-
+            
             df=pd.DataFrame(df_array,columns=['lambda','SED'])
             #print(df.shape)
-
+            df=df[df['lambda']<= lam_max]
+            
+            df=df[df['lambda']>= lam_min]
             alt_chart=alt.Chart(df).mark_point().encode(
-                x=alt.X('lambda',scale=alt.Scale(type="log")),y=alt.Y('SED',scale=alt.Scale(type="log")),
+                x=alt.X('lambda',scale=alt.Scale(domain=[lam_min,lam_max],type="log")),y=alt.Y('SED',scale=alt.Scale(domain=[flux_min,flux_max],type="log")),
                     #tooltip=[alt.Tooltip('lam', title=r'$ \nu F_\nu [erg/cm^2/s]$'),
                    # alt.Tooltip("SED", title="Price (USD)"),]
             ).properties(
@@ -515,31 +544,6 @@ def main():
             
             l, = ax.plot(t, s,marker='+',linestyle='none')
 
-
-            #slider to adjust the x and y axis
-            lam_min_start,lam_max_start=np.min(wavelength),10**3
-            flux_min_start,flux_max_start=10**-12,10**-7
-            
-            adjust_limits=False
-            adjust_limits=st.checkbox('Adjust plot limits',value=False)
-
-            
-            if observe:
-                lam_min_start,lam_max_start=np.min(lam_obs)*0.9,np.max(lam_obs)*1.1
-                flux_min_start,flux_max_start=10**(int(np.min(np.log10(flux_obs))-1)), 10**(int(np.max(np.log10(flux_obs))+1))
-            if adjust_limits:
-                lam_min=float(st.text_input(label='Minimal wavelength',value=lam_min_start,key='lam_min'))
-                lam_max=float(st.text_input(label='Maximal wavelength',value=lam_max_start,key='lam_max'))
-                flux_min=float(st.text_input(label='Minimal SED value',value=flux_min_start,key='flux_min'))
-                flux_max=float(st.text_input(label='Maximal SED value',value=flux_max_start,key='flux_max'))
-            else:
-                lam_min=lam_min_start
-                lam_max=lam_max_start
-                flux_min=flux_min_start
-                flux_max=flux_max_start
-                
-                
-            st.markdown('---')
             ax.axis([lam_min,lam_max ,flux_min,flux_max])
 
 
