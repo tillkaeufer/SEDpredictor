@@ -183,7 +183,7 @@ def calculate_mstar(Teff,Lstar):
 def angle_to_mcfost_val(angle):
     rad=angle*np.pi/180
     cosx=np.cos(rad)
-    mcfost_incl=10-(cosx-0.05)/0.1    
+    mcfost_incl=9-(cosx-0.05)/0.1    
     return mcfost_incl
 
 
