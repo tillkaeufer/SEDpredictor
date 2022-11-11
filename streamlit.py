@@ -358,7 +358,7 @@ def main():
             start=time()
 
         questions = {
-        'Complexity': ['Single zone', 'Two-zone'], 
+        'Complexity': ['Single zone'], #, 'Two-zone' 
      #   'Two-zone flavor': ['discontinues', 'continues','smooth'],
         'Input version':['Slider','Text only']}
   
