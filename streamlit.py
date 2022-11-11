@@ -1,5 +1,5 @@
 from time import time
-timing=True
+timing=False
 fast_plotting=False
 if timing:
     start_tot=time()
