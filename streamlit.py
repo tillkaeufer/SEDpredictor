@@ -1,6 +1,6 @@
 from time import time
-timing=False
-fast_plotting=True
+timing=True
+fast_plotting=False
 if timing:
     start_tot=time()
 import numpy as np
@@ -43,7 +43,8 @@ from scipy import interpolate
 from PyAstronomy import pyasl
 from observation import load_observations
 from chi_computations import chi_window,chi_squared,chi_squared_reduced
-from dict_file import slider_dict, log_dict
+from dict_file import slider_dict, log_dict, slider_dict_two, log_dict_two 
+from plotting import density_plot
 #from para_transform import para_to_parameterin
 #from rout import adjust_rout
 
@@ -62,7 +63,7 @@ st.set_page_config(
 )
 
 
-name='single_45_rinlog' # what network to use
+NN_name='single_45_rinlog' # what network to use
 star_name='star_m-only_3' #what network for mass prediction of star
 path_data='./data' #where is the downloaded data
 
@@ -134,10 +135,10 @@ def para_to_parameterin(input_string):
 
 
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)  
-def load_data(path_data,name, delete_derived_paras=True):
-    scaler=joblib.load(f'{path_data}/scaler/{name}_para_scaler.save')
-    y_scaler=joblib.load(f'{path_data}/scaler/{name}_sed_scaler.save')
-    model_saved=load_model(f'{path_data}/NeuralNets/{name}.h5')
+def load_data(path_data,NN_name, delete_derived_paras=True):
+    scaler=joblib.load(f'{path_data}/scaler/{NN_name}_para_scaler.save')
+    y_scaler=joblib.load(f'{path_data}/scaler/{NN_name}_sed_scaler.save')
+    model_saved=load_model(f'{path_data}/NeuralNets/{NN_name}.h5')
         
     header_start=np.load(f'{path_data}/header.npy')
     header_start=np.concatenate((header_start,['incl']),axis=0)
@@ -162,8 +163,8 @@ def load_data(path_data,name, delete_derived_paras=True):
     wavelength=np.array(txt,'float64')
     return  scaler, y_scaler, model_saved, header, wavelength
 
-scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,name=name)
 
+#scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name)
 
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def load_nn_and_scaler_star(path_data,star_name):    
@@ -187,15 +188,15 @@ def angle_to_mcfost_val(angle):
     return mcfost_incl
 
 
-def transform_parameter(name,val):
+def transform_parameter(paraname,val,header,scaler):
     dummy=np.zeros((1,len(header)))
 ##    if name in name_log:
 #        val=np.log10(val)
-    if name=='incl':
+    if paraname=='incl':
         val=float(val)
         val=angle_to_mcfost_val(val)
-    if name in header:
-        pos=np.where(header==name)[0][0]
+    if paraname in header:
+        pos=np.where(header==paraname)[0][0]
         dummy[0,pos]=val
         val=scaler.transform(dummy)[0,pos]
         return val,pos
@@ -347,12 +348,17 @@ def main():
                         if parameter=='R(V)':
                             R_Vstart=value  
         
+        
+        create_density_plot=st.checkbox('Plot 2D density',value=True)
+        
+        plot_column_dens=st.checkbox(label='Plot column density',value=True)
+        
         #print(slider_dict)
         if timing:
             start=time()
 
         questions = {
-     #   'Complexity': ['Single zone', 'Two-zone'], 
+        'Complexity': ['Single zone', 'Two-zone'], 
      #   'Two-zone flavor': ['discontinues', 'continues','smooth'],
         'Input version':['Slider','Text only']}
   
@@ -361,19 +367,25 @@ def main():
 
         for question, answers in questions.items():
             valid_to_select = True
-            if question!='Two-zone flavor' or complexity=='Two-zone':
+            #if question!='Two-zone flavor' or complexity=='Two-zone':
 
-                st.sidebar.markdown("### " + question.replace('-', ' ').capitalize() + '?')
-                if valid_to_select:
-                            if question=='Complexity':
-                                complexity = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+            st.sidebar.markdown("### " + question.replace('-', ' ').capitalize() + '?')
+            if valid_to_select:
+                        if question=='Complexity':
+                            complexity = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+                        else:
+                            if question=='Input version':
+                                input_version = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+
                             else:
-                                if question=='Input version':
-                                    input_version = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+                                selected_answer = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+        
+        #loading the networks and scalers for single or two-zone models
+        
+        if complexity=='Single zone':
+            scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name)
 
-                                else:
-                                    selected_answer = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
-
+                                    
         st.sidebar.markdown("## " + 'Parameters'.capitalize())
 
 
@@ -417,7 +429,7 @@ def main():
         for key in header:
             #print(key)name=slider_dict[key]['label']
             mini,maxi=slider_dict[key]['lims']
-            name=slider_dict[key]['label']
+            paraname=slider_dict[key]['label']
             try:
                 value=float(slider_dict[key]['x0'])
             except:
@@ -426,10 +438,10 @@ def main():
                 col1,col2=st.sidebar.columns([1,1])
                 with col1:
                     
-                    st.sidebar.write(name)
+                    st.sidebar.write(paraname)
                 with col2:
                     middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
-                if 'log' in name:
+                if 'log' in paraname:
                     middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,6)),key=c)#
                     middle=np.log10(float(middle))
                     c+=1       
@@ -440,13 +452,13 @@ def main():
                 #print(c)
                 st.sidebar.markdown('---')
             else:
-                if 'log' in name:
-                    name_withoutlog='$'+name[10:-2]+'$'
+                if 'log' in paraname:
+                    name_withoutlog='$'+paraname[10:-2]+'$'
                     
                     st.sidebar.write(name_withoutlog)
                 else:
-                    st.sidebar.write(name)
-                if 'log' in name:
+                    st.sidebar.write(paraname)
+                if 'log' in paraname:
                     
                     middle=st.sidebar.text_input(label='',value=float(np.round(10**value,4)),key=c)
                     middle=np.log10(float(middle))
@@ -461,7 +473,7 @@ def main():
             if calc_mdisk:
                 if key=='Mdisk':
                     init_mass=10**middle
-            val_trans, pos=transform_parameter(key,middle)
+            val_trans, pos=transform_parameter(key,middle,header,scaler)
             features[0,pos]=val_trans
             if key=='amC-Zubko[s]':
                 middle_sio=0.75-middle
@@ -511,11 +523,18 @@ def main():
             lam_max=float(st.text_input(label='Maximal wavelength',value=lam_max_start,key='lam_max'))
             flux_min=float(st.text_input(label='Minimal SED value',value=flux_min_start,key='flux_min'))
             flux_max=float(st.text_input(label='Maximal SED value',value=flux_max_start,key='flux_max'))
+            if create_density_plot:
+                zmax=float(st.text_input(label='Density plot: maximum height (0-2)',value=1.0,key='dens_zmax'))
+                
+                cmin=float(st.text_input(label='Density plot: minimum density',value=4,key='dens_cmin'))
+            
         else:
             lam_min=lam_min_start
             lam_max=lam_max_start
             flux_min=flux_min_start
             flux_max=flux_max_start
+            zmax=1.0
+            cmin=4.0
             
             
         st.markdown('---')
@@ -600,6 +619,26 @@ def main():
                 plot_time=end-start
                 start=time()
             st.pyplot(fig)#,clear_figure=True)
+            
+            #plot density structure
+            if create_density_plot:
+                #create dictionary as imput for plotting
+                exp_features=scaler.inverse_transform(features)
+                print(np.shape(exp_features),np.shape(header))
+                dict_para={}
+                for i in range(len(header)):
+                    if log_dict[header[i]]=='log':
+                        exp_features[:,i]=10**(exp_features[:,i])
+                    dict_para[header[i]]=exp_features[:,i][0]
+                print(dict_para)
+                den=density_plot(dict_para)
+                den.get_density_structure()
+                fig_dens=den.plot_fig_density(zmax=zmax,cmin=cmin)
+                st.pyplot(fig_dens)
+                if plot_column_dens:
+                    fig_col=den.plot_fig_columndensity()
+                    st.pyplot(fig_col)
+                    
             if timing:
                 end=time()
                 loadplot_time=end-start
