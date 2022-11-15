@@ -23,7 +23,7 @@ class density_plot:
         '''
         list with the surface density by radius
         '''
-        self.surface_den=np.zeros(N_rad)
+        self.surface_den=np.ones(N_rad)
         '''
         list with the radial coordiantes
         '''
@@ -34,6 +34,12 @@ class density_plot:
         '''
         self.z_list=None
         self.N_ver=N_ver
+        '''
+        single or two zone models and counter to change inner and outer zone
+        '''
+        self.two_zone=False
+        self.inner_zone=True
+
         '''
         physical constants
         '''
@@ -99,11 +105,20 @@ class density_plot:
         
     def get_density_structure(self):
         if 'Rout' not in self.parameter_dict:
-            print('Adjusting Rout')
+            #print('Adjusting Rout')
             self.adjust_rout(self)
         
+        #check if single or two-zone file
+        if 'R2in' in self.parameter_dict:
+            self.two_zone=True
+        else:
+            self.two_zone=False
+        
         #setup the radial and vertical points 
-        min_rad=self.parameter_dict['Rin']
+        if self.two_zone:
+            min_rad=self.parameter_dict['R2in']
+        else:
+            min_rad=self.parameter_dict['Rin']
         max_rad=self.parameter_dict['Rout']
         
         self.radii=np.logspace(np.log10(min_rad),np.log10(max_rad),num=self.N_rad+1)
@@ -111,23 +126,42 @@ class density_plot:
         #print(np.shape(self.z_list))
         
         self.get_radial_structure(self)
+        if self.two_zone:
+            inner_density=self.surface_den
+            self.get_radial_structure(self)
+            outer_density=self.surface_den
+            tot_structure=np.ones((self.N_rad+1))
+            tot_structure[:len(inner_density)]=inner_density
+            tot_structure[-len(outer_density):]=outer_density
+            self.surface_den=tot_structure
         self.vertical_structure(self)
     
     def get_radial_structure(self,debug=False):
         new_rtmp=True
         debug=False
+        two_zone=self.two_zone
         '''
         get relevant parameters from dict
         '''
-        R1in=self.parameter_dict['Rin']
-        Rtaper=self.parameter_dict['Rtaper']
-        Rout=self.parameter_dict['Rout']
-        e1psilon=self.parameter_dict['epsilon']
-        if 'gtaper' in self.parameter_dict:
-            gtaper=self.parameter_dict['gtaper']
+        if two_zone and self.inner_zone:
+            R1in=self.parameter_dict['R2in']
+            Rout=self.parameter_dict['R2out']
+            Rtaper=0
+            gtaper=0
+            e1psilon=self.parameter_dict['e2psilon']
+            
+            M1disk=self.parameter_dict['M2disk']
+            self.inner_zone=False
         else:
-            gtaper=min(2,e1psilon)
-        M1disk=self.parameter_dict['Mdisk']
+            R1in=self.parameter_dict['Rin']
+            Rtaper=self.parameter_dict['Rtaper']
+            Rout=self.parameter_dict['Rout']
+            e1psilon=self.parameter_dict['epsilon']
+            if 'gtaper' in self.parameter_dict:
+                gtaper=self.parameter_dict['gtaper']
+            else:
+                gtaper=min(2,e1psilon)
+            M1disk=self.parameter_dict['Mdisk']
 
         
         #gettting the constants
@@ -145,8 +179,7 @@ class density_plot:
         if debug:
             print(np.min(rtmp*AU),R1in)
             print(np.max(rtmp*AU),Rout)
-
-            
+           
         Np=len(rtmp)-1
 
         Ntmp=np.zeros(Np+1)
@@ -178,41 +211,61 @@ class density_plot:
         if debug:
             print('new mass', mass)
             print(fac)
-
-        
+ 
         self.surface_den=Ntmp
     def vertical_structure(self,debug=False):
+        two_zone=self.two_zone
         debug=False
+        if two_zone:
+            r_2=1
+            H2=self.parameter_dict['MCFOST_H2']
+            beta2=self.parameter_dict['MCFOST_B2']
+            r2out=self.parameter_dict['R2out']
+       
         r_0=100
-        z_list=self.z_list
         H0=self.parameter_dict['MCFOST_H0']
-        r_list=self.radii
         beta=self.parameter_dict['MCFOST_BETA']
+        rin=self.parameter_dict['Rin']
+
+        z_list=self.z_list
+        r_list=self.radii
         surf=self.surface_den
         
         AU=self.const['AU']
         if debug:
             print('Shape surf',np.shape(surf))
         for j in range(len(r_list)):
+            stop=False
             r=r_list[j]
             N_surf=surf[j]
             if debug:
                 print('R')
                 print(r)
             density_list=np.zeros_like(z_list)
-            Hr=H0*(r/r_0)**(beta)
-            if debug:
-                print('H')
-                print(Hr/r)
-            f1=2*N_surf/np.sqrt(2*np.pi)/(Hr*AU)
-            for i in range(len(z_list)):
-                z=z_list[i]*r
-                f2=np.exp(-(z/Hr)**2/2)
-                nHtot=f1*f2
+            if two_zone:
+                if r>rin:
+                    Hr=H0*(r/r_0)**(beta)
+                elif r<r2out:
+                    Hr=H2*(r/r_2)**(beta2)
+                else:
+                    stop=True
+                    self.density_structure[j]=1
+            else:
+                Hr=H0*(r/r_0)**(beta)
+
+            if not stop:
                 if debug:
-                    print(nHtot)
-                density_list[i] = max(0.0,nHtot)
-            self.density_structure[j]=density_list
+                    print('H')
+                    print(Hr/r)
+                f1=2*N_surf/np.sqrt(2*np.pi)/(Hr*AU)
+                for i in range(len(z_list)):
+                    z=z_list[i]*r
+                    f2=np.exp(-(z/Hr)**2/2)
+                    nHtot=f1*f2
+                    if debug:
+                        print(nHtot)
+                    density_list[i] = max(1.0,nHtot)
+                self.density_structure[j]=density_list
     def plot_fig_columndensity(self):
         fig, ax = plt.subplots(figsize=(9,6))
         dens=np.log10(self.surface_den)

@@ -7,12 +7,12 @@ Created on Fri Sep 16 15:17:48 2022
 """
 
 
-log_dict={'Mstar': 'log', 'Lstar': 'log', 'Teff': 'log', 'fUV': 'log', 'pUV': 'log', 'amin': 'log', 'amax': 'log',
+log_dict_single={'Mstar': 'log', 'Lstar': 'log', 'Teff': 'log', 'fUV': 'log', 'pUV': 'log', 'amin': 'log', 'amax': 'log',
       'apow': 'linear', 'a_settle': 'log', 'Mg0.7Fe0.3SiO3[s]': 'linear', 'amC-Zubko[s]': 'linear', 'fPAH': 'log',
    'PAH_charged': 'linear', 'Mdisk': 'log', 'Rin': 'log', 'Rtaper': 'log', 'Rout': 'log', 'epsilon': 'linear',
    'MCFOST_H0': 'linear', 'MCFOST_BETA': 'linear', 'incl': 'linear'}#,'Dist[pc]':'linear'}
 
-slider_dict={
+slider_dict_single={
     'Mstar':{
         'label':r'$log_{10}(M_{star}) [M_{sun}]$',
         'lims':[-0.69, 0.39],
@@ -23,13 +23,13 @@ slider_dict={
     'Teff':{
         'label':r'$log_{10}(T_{eff})$',
         'lims':[3.5, 4.0], 
-        'x0':3.69,
+        'x0':3.73,
         'priority':1},
     
     'Lstar':{
         'label':r'$log_{10}(L_{star})$',
         'lims':[-1.3, 1.7],
-        'x0':0.79,
+        'x0':-0.14,
         'priority':1}, 
     'fUV':{
         'label':r'$log_{10}(f_{UV})$',
@@ -143,45 +143,45 @@ slider_dict={
 
 slider_dict_two={
     'Mstar':{
-        'label':r'$log(M_{star}) [M_{sun}]$',
+        'label':r'$log_{10}(M_{star}) [M_{sun}]$',
         'lims':[-0.69, 0.39],
         'x0':0.06,
         'priority':1}
         ,
     
     'Teff':{
-        'label':r'$log(T_{eff})$',
+        'label':r'$log_{10}(T_{eff})$',
         'lims':[3.5, 4.0], 
-        'x0':3.69,
+        'x0':3.73,
         'priority':1},
     
     'Lstar':{
-        'label':r'$log(L_{star})$',
+        'label':r'$log_{10}(L_{star})$',
         'lims':[-1.3, 1.7],
-        'x0':0.79,
+        'x0':-0.14,
         'priority':1}, 
     'fUV':{
-        'label':r'$log(fUV)$',
+        'label':r'$log_{10}(f_{UV})$',
         'lims':[-3, -1],
-        'x0':-0.57, 
+        'x0':-1.57, 
         'priority':1},
     
     'pUV':{
-        'label':r'$log(pUV)$',
+        'label':r'$log_{10}(p_{UV})$',
         'lims':[-0.3, 0.39],
         'x0':-0.02, 
         'priority':1},
     
     'Mdisk':{
-        'label':r'$log(Mass_{disk})$',
+        'label':r'$log_{10}(M_{disk})$',
         'lims':[-5, 0],
         'x0':-1.367, 
         'priority':2},
     
     'incl':{
         'label':r'$incl [Deg]$',
-        'lims':[0, 9],
-        'x0':2,
+        'lims':[0.0, 90.0],
+        'x0':20.0,
         'priority':2},
     
     'Rin':{
@@ -191,13 +191,13 @@ slider_dict_two={
         'priority':2},
    
      'Rtaper':{
-        'label':r'$log(R_{taper}[AU])$',
+        'label':r'$log_{10}(R_{taper}[AU])$',
         'lims':[0.7, 2.5],
          'x0':1.95, 
         'priority':2},
     
     'Rout':{
-        'label':r'$log(R_{out}[AU])$',
+        'label':r'$log_{10}(R_{out}[AU])$',
         'lims':[1.3, 3.14],
         'x0':2.556, 
         'priority':2},
@@ -215,26 +215,26 @@ slider_dict_two={
         'priority':2},
     
     'MCFOST_H0':{
-        'label':'MCFOST_H0[AU]',
+        'label':'$H_0[AU]$',
         'lims':[3, 35],
         'x0':12, 
         'priority':2},    
     
     'a_settle':{
-        'label':r'$log(a_{settle})$',
+        'label':r'$log_{10}(a_{settle})$',
         'lims':[-5, -1],
         'x0':-3, 
         'priority':3},
     
     'amin':{
-        'label':r'$log(a_{min})$',
+        'label':r'$log_{10}(a_{min})$',
         'lims':[-3, -1],
         'x0':-1.5, 
         'priority':3},
     
     
     'amax':{
-        'label':r'$log(a_{max})$',
+        'label':r'$log_{10}(a_{max})$',
         'lims':[2.48, 4],
         'x0':3.6, 
         'priority':3},
@@ -258,52 +258,52 @@ slider_dict_two={
         'priority':3},
     
     'fPAH':{
-        'label':r'$log(fPAH)$',
+        'label':r'$log_{10}(f_{PAH})$',
         'lims':[-3.5, 0],
         'x0':-1.5, 
         'priority':3},
     
     'PAH_charged':{
-        'label':r'PAH_charged',
+        'label':r'$PAH_{charged}$',
         'lims':[0, 1], 
         'priority':3},
     'M2disk':{
-        'label':r'log(M2disk)',
+        'label':r'$log_{10}(M_{disk,2})$',
         'lims':[-11, -1],
         'x0':-6,
         'priority':4},
     'e2psilon':{
-        'label':r'e2psilon',
+        'label':r'$\epsilon_2$',
         'lims':[-1, 2],
         'x0':0.7,
         'priority':4},
     'MCFOST_H2':{
-            'label':r'MCFOST_H2[AU]',
+            'label':r'$H_2[AU]$',
         'lims':[0.02, 0.5],
         'x0':0.1,
         'priority':4},
     'MCFOST_B2':{
-        'label':r'MCFOST_B2',
+        'label':r'$\beta_2$',
         'lims':[0.05, 1.7],
-        'x0':0.27,
+        'x0':1.0,
         'priority':4},
     'R2in':{
-        'label':r'log(R2_{in}[AU])',
+        'label':r'$log_{10}(R_{in,2}[AU])$',
         'lims':[-2, 2],
         'x0':-0.5,
         'priority':4},
     'R2out':{
-        'label':r'log(R2_{out}[AU])',
+        'label':r'$log_{10}(R_{out,2}[AU])$',
         'lims':[-2, 1.5],
         'x0':0.9,
         'priority':4},
     'a2max':{
-        'label':r'$log(a2_{max})$',
+        'label':r'$log_{10}(a_{max,2})$',
         'lims':[-1, 4],
         'x0':2.5,
         'priority':4},
     'f2PAH':{
-            'label':r'log(fPAH)',
+            'label':r'$log_{10}(f_{PAH,2})$',
         'lims':[-6, -1],
         'x0':-3,
         'priority':4}

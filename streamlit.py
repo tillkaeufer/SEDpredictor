@@ -43,10 +43,11 @@ from scipy import interpolate
 from PyAstronomy import pyasl
 from observation import load_observations
 from chi_computations import chi_window,chi_squared,chi_squared_reduced
-from dict_file import slider_dict, log_dict, slider_dict_two, log_dict_two 
+from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
 from plotting import density_plot
 #from para_transform import para_to_parameterin
 #from rout import adjust_rout
+from check_if_possible import load_all_star_lims,normalizing,find_nearest,in_or_out,check_if_in, new_radius_lims,check_if_valid_prediction
 
 import streamlit as st
 para_dict={}
@@ -63,7 +64,7 @@ st.set_page_config(
 )
 
 
-NN_name='single_45_rinlog' # what network to use
+NN_name='single_46_opti' # what network to use
 star_name='star_m-only_3' #what network for mass prediction of star
 path_data='./data' #where is the downloaded data
 
@@ -135,13 +136,16 @@ def para_to_parameterin(input_string):
 
 
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)  
-def load_data(path_data,NN_name, delete_derived_paras=True):
+def load_data(path_data,NN_name, delete_derived_paras=True,two_zone=False):
     scaler=joblib.load(f'{path_data}/scaler/{NN_name}_para_scaler.save')
     y_scaler=joblib.load(f'{path_data}/scaler/{NN_name}_sed_scaler.save')
     model_saved=load_model(f'{path_data}/NeuralNets/{NN_name}.h5')
+    if not two_zone:
+        header_start=np.load(f'{path_data}/header.npy')
+        header_start=np.concatenate((header_start,['incl']),axis=0)
+    else:
+        header_start=np.load(f'{path_data}/header_two_zone.npy')
         
-    header_start=np.load(f'{path_data}/header.npy')
-    header_start=np.concatenate((header_start,['incl']),axis=0)
 
     if delete_derived_paras:
         list_derived=['Mstar', 'amC-Zubko[s]', 'Rout']
@@ -231,7 +235,7 @@ def main():
     <br><br/>
     This tool predictions SEDs of protoplanetary disk using neural networks.
     <br/>
-    If this tool is useful to your work, please cite (Kaeufer et al., in prep)
+    If this tool is useful to your work, please cite (Kaeufer et al., submitted)
     """
     , unsafe_allow_html=True)
 #    should_tell_me_more = st.button('Tell me more')
@@ -251,6 +255,49 @@ def main():
         
         
     else:
+        questions = {
+        'Complexity': ['Single zone', 'Two-zone'], #, 'Two-zone' 
+     #   'Two-zone flavor': ['discontinues', 'continues','smooth'],
+        'Input version':['Slider','Text only']}
+  
+        st.sidebar.markdown('# Create your disk')
+
+
+        for question, answers in questions.items():
+            valid_to_select = True
+            #if question!='Two-zone flavor' or complexity=='Two-zone':
+
+            st.sidebar.markdown("### " + question.replace('-', ' ').capitalize() + '?')
+            if valid_to_select:
+                        if question=='Complexity':
+                            complexity = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+                        else:
+                            if question=='Input version':
+                                input_version = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+
+                            else:
+                                selected_answer = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
+        
+        #loading the networks and scalers for single or two-zone models
+        
+        if complexity=='Two-zone':
+            two_zone=True
+            
+            slider_dict=slider_dict_two
+            log_dict=log_dict_two
+
+            NN_name='two_38_small_batch' # what network to use
+        else:
+            two_zone=False
+            slider_dict=slider_dict_single
+            log_dict=log_dict_single
+            
+            NN_name='single_46_opti' # what network to use
+        scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name,two_zone=two_zone)
+       
+            
+                                  
+
         st.markdown('---')
         st.markdown("""### Different settings.""")
         fast_plotting=st.checkbox('Simplified faster plotting',value=False)
@@ -353,39 +400,12 @@ def main():
         
         plot_column_dens=st.checkbox(label='Plot column density',value=True)
         
+        
         #print(slider_dict)
         if timing:
             start=time()
 
-        questions = {
-        'Complexity': ['Single zone'], #, 'Two-zone' 
-     #   'Two-zone flavor': ['discontinues', 'continues','smooth'],
-        'Input version':['Slider','Text only']}
-  
-        st.sidebar.markdown('# Create your disk')
-
-
-        for question, answers in questions.items():
-            valid_to_select = True
-            #if question!='Two-zone flavor' or complexity=='Two-zone':
-
-            st.sidebar.markdown("### " + question.replace('-', ' ').capitalize() + '?')
-            if valid_to_select:
-                        if question=='Complexity':
-                            complexity = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
-                        else:
-                            if question=='Input version':
-                                input_version = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
-
-                            else:
-                                selected_answer = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
         
-        #loading the networks and scalers for single or two-zone models
-        
-        if complexity=='Single zone':
-            scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name)
-
-                                    
         st.sidebar.markdown("## " + 'Parameters'.capitalize())
 
 
@@ -473,6 +493,7 @@ def main():
             if calc_mdisk:
                 if key=='Mdisk':
                     init_mass=10**middle
+            
             val_trans, pos=transform_parameter(key,middle,header,scaler)
             features[0,pos]=val_trans
             if key=='amC-Zubko[s]':
@@ -482,6 +503,31 @@ def main():
              
             #print(val_trans)  
         #print(features)
+        
+        
+        #create dictionary of the input parametermeters for checking if possible and for plotting
+        exp_features=scaler.inverse_transform(features)
+        print(np.shape(exp_features),np.shape(header))
+        dict_para={}
+        for i in range(len(header)):
+            if log_dict[header[i]]=='log':
+                exp_features[:,i]=10**(exp_features[:,i])
+            dict_para[header[i]]=exp_features[:,i][0]
+        print(dict_para)
+        
+        
+        #checking if possible
+        
+        if check_if_in(p0=np.log10(dict_para['Teff']),p1=np.log10(dict_para['Lstar'])):
+            st.error('Star not in the range the NN was trained on!!', icon="⚠️")
+            #TODO HDR of where star is
+        
+        error_string=check_if_valid_prediction(dict_para,two_zone=two_zone)
+        #TODO in check if valid, mass of disk compared to mass of star and the general limits of the sample
+        if error_string!='':
+            print(error_string)
+            st.error(error_string, icon="⚠️")
+        
         if timing:
             end2=time()
             para_time=end2-start2
@@ -622,15 +668,6 @@ def main():
             
             #plot density structure
             if create_density_plot:
-                #create dictionary as imput for plotting
-                exp_features=scaler.inverse_transform(features)
-                print(np.shape(exp_features),np.shape(header))
-                dict_para={}
-                for i in range(len(header)):
-                    if log_dict[header[i]]=='log':
-                        exp_features[:,i]=10**(exp_features[:,i])
-                    dict_para[header[i]]=exp_features[:,i][0]
-                print(dict_para)
                 den=density_plot(dict_para)
                 den.get_density_structure()
                 fig_dens=den.plot_fig_density(zmax=zmax,cmin=cmin)
