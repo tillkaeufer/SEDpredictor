@@ -10,4 +10,3 @@ joblib
 PyAstronomy
 scikit-learn
 dill 
-glob
