@@ -467,7 +467,11 @@ def main():
                 with col2:
                     middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
                 if 'log' in paraname:
-                    middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,6)),key=c)#
+                    if 'disk,2' in paraname:
+                        round_n=12
+                    else:
+                        round_n=6    
+                    middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,round_n)),key=c)#
                     middle=np.log10(float(middle))
                     c+=1       
     
