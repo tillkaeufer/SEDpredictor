@@ -5,7 +5,7 @@ altair
 pandas
 matplotlib
 scipy 
-streamlit==1.11
+streamlit==1.14.1
 joblib
 PyAstronomy
 scikit-learn
