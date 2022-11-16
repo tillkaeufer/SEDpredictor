@@ -145,8 +145,7 @@ def check_if_valid_prediction(para_dict,two_zone=False):
     if two_zone:
         if para_dict['M2disk']>para_dict['Mdisk']*10**(-0.7) or para_dict['M2disk']<para_dict['Mdisk']*10**(-7):    
             error_string=error_string+'Mass of inner zone must be between 10^(-0.7)* mass of outer zone and 10^(-7)*mass of outer zone\n'
-    #mass of disk to mass of star
-    
+
     
     return error_string
     

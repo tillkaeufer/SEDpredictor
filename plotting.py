@@ -6,7 +6,7 @@ Created on Fri Nov 11 15:14:35 2022
 """
 import numpy as np
 import matplotlib.pyplot as plt
-
+import glob
 
 
 
@@ -298,3 +298,91 @@ class density_plot:
         
         fig.colorbar(plotax,label='$\\log_{10} n_{\\rm <H>} \\rm [cm^{-3}]$')
         return fig
+    
+    
+# hrd utils
+
+def load_siesstracks():
+    files=glob.glob('./data/Siesstracks/*.hrd')
+    files.sort()
+    L=[]
+    T=[]
+    ages=[]
+    m=[]
+    max_T,min_T=0,100000
+    max_L,min_L=0,10
+    for i in range(len(files)):
+        print(files[i],np.shape(np.loadtxt(files[i])[:,2]))
+        idx=np.max(np.where(np.loadtxt(files[i])[:,1]==1))+1
+        L.append(np.loadtxt(files[i])[:idx,2]) #L
+        T.append(np.loadtxt(files[i])[:idx,6]) #T
+        ages.append(np.loadtxt(files[i])[:idx,-1])
+        m.append(np.loadtxt(files[i])[0,-2])
+        print(len(ages[i]),len(T[i]),len(L[i]))
+        max_t,min_t = np.max(T[i]),np.min(T[i])
+        if max_t>max_T:
+            max_T=max_t
+        if min_t< min_T:
+            min_T=min_t
+        max_l,min_l = np.max(L[i]),np.min(L[i])
+        if max_l>max_L:
+            max_L=max_l
+        if min_l< min_L:
+            min_L=min_l
+    myr=10**6
+    chrome_list=[0.01*myr,0.1*myr,1*myr,10*myr,20*myr]#2*myr,3*myr,4*myr,5*myr,6*myr,7*myr,8*myr,9*myr,,50*myr]#,100*myr]
+
+    isochrome=np.zeros((len(chrome_list),len(files),2))
+    for j in range(len(chrome_list)):
+        for i in range(len(ages)):
+            v = (np.abs(ages[i] - chrome_list[j])).argmin()
+
+            isochrome[j,i,0]=T[i][v]
+            isochrome[j,i,1]=L[i][v]
+    isochrome=np.sort(isochrome,axis=1)
+    return L,T,m,max_T,max_L,min_T,min_L,isochrome,chrome_list
+
+def plot_hrd(L,T,m,max_T,max_L,min_T,min_L,isochrome,chrome_list,lim_o_T,lim_o_L,T_low,L_low,T_up_mod,L_up_mod,lim_y_T,lim_y_L,temp,lum):
+    
+    fig=plt.figure(figsize=(9,7),constrained_layout=True)
+    ax = fig.add_subplot(111)
+
+    take_label=[2,4,6,8,12,22,26,31]
+
+    for i in range(len(T)):
+
+        if i in take_label:
+
+            ax.plot(T[i],L[i],c='black',alpha=0.7)#,c=cm(1.0*i/len(files)),alpha=0.5)
+            if i == 2:
+                ax.annotate(str(m[i])+ r' $M_{sun}$',xy=(T[i][0],L[i][0]),xytext=(T[i][0]*1,L[i][0]*1.2))
+            else:
+                ax.annotate(str(m[i])+ r' $M_{sun}$',xy=(T[i][0],L[i][0]),xytext=(T[i][0]*1.0,L[i][0]*1.0))
+        else:
+
+            ax.plot(T[i],L[i],c='grey',alpha=0.7)#,c=cm(1.0*i/len(files)),alpha=0.5)
+    ax.set_xlim([max_T*1.1,min_T*0.9])
+    ax.set_ylim([min_L*0.9,max_L*1.1])
+
+    ax.set_xlabel(r'$T_{eff} \ [K]$')
+    ax.set_ylabel(r'$L \ [L_{sun}]$')
+    ax.set_yscale('log')
+    ax.set_xscale('log')
+    xtickslocs=[3*10**3,5*10**3,10**4,2*10**4]
+    xtickslocs_names=[r'$3\cdot10^3$',r'$5\cdot10^3$',r'$10^4$',r'$2\cdot10^4$']
+    #print(xtickslocs,xtickslocs_names)
+    ax.set_xticks(xtickslocs,xtickslocs_names)
+    #ax.xaxis.set_major_locator(mticker.FixedLocator(xtickslocs))
+    for v in range(len(chrome_list)):
+        ax.plot(isochrome[v,:,0],isochrome[v,:,1],linestyle='--',alpha=0.7,color='grey')
+        ax.annotate(f'{chrome_list[v]/10**6} Myr',xy=(isochrome[v,0,0],isochrome[v,0,1]),xytext=(isochrome[v,0,0]*0.97,isochrome[v,0,1]*0.97))
+    
+    #add boundries
+    ax.plot(lim_o_T[11:-28],lim_o_L[11:-28],linestyle='solid',color='tab:red',lw=3)
+    ax.plot(lim_y_T[11:-28],lim_y_L[11:-28],linestyle='solid',color='tab:red',lw=3)
+    
+    ax.plot(T_up_mod[146:-2],L_up_mod[146:-2],linestyle='solid',color='tab:red',lw=3)
+    ax.plot(T_low[38:-225],L_low[38:-225],linestyle='solid',color='tab:red',lw=3,label='Limits')
+    ax.scatter(temp,lum,marker='.',s=200.0,color='tab:blue',label='Star')
+    ax.legend(loc='lower left')
+    return fig

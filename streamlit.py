@@ -44,7 +44,7 @@ from PyAstronomy import pyasl
 from observation import load_observations
 from chi_computations import chi_window,chi_squared,chi_squared_reduced
 from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
-from plotting import density_plot
+from plotting import density_plot, load_siesstracks, plot_hrd
 #from para_transform import para_to_parameterin
 #from rout import adjust_rout
 from check_if_possible import load_all_star_lims,normalizing,find_nearest,in_or_out,check_if_in, new_radius_lims,check_if_valid_prediction
@@ -224,6 +224,11 @@ def spline(lam,nuflux,new_lam):
 if timing:
     end=time()
     loading_time=end-start
+    
+    
+L,T,m,max_T,max_L,min_T,min_L,isochrome,chrome_list=load_siesstracks()
+
+lim_o_T,lim_o_L,T_low,L_low,T_up_mod,L_up_mod,lim_y_T,lim_y_L=load_all_star_lims()
     
 def main():
     st.title('SEDs of protoplanetary disk models')
@@ -505,54 +510,6 @@ def main():
         #print(features)
         
         
-        #create dictionary of the input parametermeters for checking if possible and for plotting
-        exp_features=scaler.inverse_transform(features)
-        print(np.shape(exp_features),np.shape(header))
-        dict_para={}
-        for i in range(len(header)):
-            if log_dict[header[i]]=='log':
-                exp_features[:,i]=10**(exp_features[:,i])
-            dict_para[header[i]]=exp_features[:,i][0]
-        print(dict_para)
-        
-        
-        #checking if possible
-        
-        if check_if_in(p0=np.log10(dict_para['Teff']),p1=np.log10(dict_para['Lstar'])):
-            st.error('Star not in the range the NN was trained on!!', icon="⚠️")
-            #TODO HDR of where star is
-        
-        error_string=check_if_valid_prediction(dict_para,two_zone=two_zone)
-        #TODO in check if valid, mass of disk compared to mass of star and the general limits of the sample
-        if error_string!='':
-            print(error_string)
-            st.error(error_string, icon="⚠️")
-        
-        if timing:
-            end2=time()
-            para_time=end2-start2
-            start=time()
-        data=10**(y_scaler.inverse_transform(model_saved(features)))[0]
-        data=change_dist(dist_start,data)
-        if not dereddeningdata:
-            #reddening
-            #print(e_bvstart,R_Vstart)
-            data=reddening(wavelength,data,e_bvstart,R_Vstart)
-        if timing:
-            end=time()
-            pred_time=end-start
-        str_title=''
-        if calc_mdisk:
-            m_disk=calc_mass(data)
-            rat_mass=m_disk/init_mass
-            str_title_new=str_title+'\n '+r'$M_{disk,calc}: %8.2e ,  M_{calc}/M_{model}: %8.2e $' %(m_disk,rat_mass)
-            ax.set_title(str_title_new,fontsize=12)
-        if timing:
-            start=time()
-        t=wavelength
-        s = data
-        
-
         #slider to adjust the x and y axis
         lam_min_start,lam_max_start=np.min(wavelength),10**3
         flux_min_start,flux_max_start=10**-12,10**-7
@@ -582,8 +539,66 @@ def main():
             zmax=1.0
             cmin=4.0
             
-            
+        plot_hrd_check=st.checkbox('Plot HRD',value=True)    
         st.markdown('---')
+        
+        #create dictionary of the input parametermeters for checking if possible and for plotting
+        exp_features=scaler.inverse_transform(features)
+        print(np.shape(exp_features),np.shape(header))
+        dict_para={}
+        for i in range(len(header)):
+            if log_dict[header[i]]=='log':
+                exp_features[:,i]=10**(exp_features[:,i])
+            dict_para[header[i]]=exp_features[:,i][0]
+        print(dict_para)
+        
+        
+        #checking if possible
+        
+        if not check_if_in(p0=np.log10(dict_para['Teff']),p1=np.log10(dict_para['Lstar'])):
+            st.error('Star not in the range the NN was trained on!!', icon="🚨")
+            plot_hrd_check=True
+            #TODO HDR of where star is
+        
+        error_string=check_if_valid_prediction(dict_para,two_zone=two_zone)
+        #TODO in check if valid, general limits of the sample
+        if error_string!='':
+           # print(error_string)
+            st.error(error_string, icon="🚨")
+        
+        #calc mass of star
+        mstar=10**(calculate_mstar(np.log10(dict_para['Teff']),np.log10(dict_para['Lstar'])))
+        
+        st.write('Predicted stellar Mass: '+str(np.round(mstar,2))+'$\\rm M_{sun}$')
+        #check is mass of disk is allowed
+        if dict_para['Mdisk']<mstar*10**(-5) or dict_para['Mdisk']>mstar:    
+            st.error('Mass of the disk is not between stellar mass and 10^(-5) times that value', icon="🚨")
+        
+        if timing:
+            end2=time()
+            para_time=end2-start2
+            start=time()
+        data=10**(y_scaler.inverse_transform(model_saved(features)))[0]
+        data=change_dist(dist_start,data)
+        if not dereddeningdata:
+            #reddening
+            #print(e_bvstart,R_Vstart)
+            data=reddening(wavelength,data,e_bvstart,R_Vstart)
+        if timing:
+            end=time()
+            pred_time=end-start
+        str_title=''
+        if calc_mdisk:
+            m_disk=calc_mass(data)
+            rat_mass=m_disk/init_mass
+            str_title_new=str_title+'\n '+r'$M_{disk,calc}: %8.2e ,  M_{calc}/M_{model}: %8.2e $' %(m_disk,rat_mass)
+            ax.set_title(str_title_new,fontsize=12)
+        if timing:
+            start=time()
+        t=wavelength
+        s = data
+        
+
         
         if fast_plotting:
             df_array=np.concatenate((np.expand_dims(wavelength,axis=0),np.expand_dims(data,axis=0)),axis=0).T
@@ -675,7 +690,17 @@ def main():
                 if plot_column_dens:
                     fig_col=den.plot_fig_columndensity()
                     st.pyplot(fig_col)
+             
                     
+             
+            #plot hrd
+            
+            if plot_hrd_check:
+                fig_hrd=plot_hrd(L,T,m,max_T,max_L,min_T,min_L,isochrome,chrome_list,lim_o_T,lim_o_L,T_low,L_low,T_up_mod,L_up_mod,lim_y_T,lim_y_L,dict_para['Teff'],dict_para['Lstar'])
+                st.pyplot(fig_hrd)
+             
+            
+            
             if timing:
                 end=time()
                 loadplot_time=end-start
@@ -690,7 +715,7 @@ def main():
                 st.write('Time to load Plot: '+str(np.round(loadplot_time,2))+'s')
                 st.write(' ')
                 st.write('Total time: '+str(np.round(tot_time,2))+'s')
-            st.success('Successfully predicted the SED')
+            #st.success('Successfully predicted the SED')
             st.markdown('----')
             exp_para=st.checkbox(label='Export Parameters',value=False)
             if exp_para:

@@ -23,13 +23,13 @@ slider_dict_single={
     'Teff':{
         'label':r'$log_{10}(T_{eff})$',
         'lims':[3.5, 4.0], 
-        'x0':3.73,
+        'x0':3.64,
         'priority':1},
     
     'Lstar':{
         'label':r'$log_{10}(L_{star})$',
         'lims':[-1.3, 1.7],
-        'x0':-0.14,
+        'x0':0.24,
         'priority':1}, 
     'fUV':{
         'label':r'$log_{10}(f_{UV})$',
@@ -58,7 +58,7 @@ slider_dict_single={
     'Rin':{
         'label':r'$log_{10}(R_{in}[AU])$',
         'lims':[-2.00, 2.00], 
-        'x0':-1.34,
+        'x0':-0.7,
         'priority':2},
    
      'Rtaper':{
@@ -152,13 +152,13 @@ slider_dict_two={
     'Teff':{
         'label':r'$log_{10}(T_{eff})$',
         'lims':[3.5, 4.0], 
-        'x0':3.73,
+        'x0':3.64,
         'priority':1},
     
     'Lstar':{
         'label':r'$log_{10}(L_{star})$',
         'lims':[-1.3, 1.7],
-        'x0':-0.14,
+        'x0':0.24,
         'priority':1}, 
     'fUV':{
         'label':r'$log_{10}(f_{UV})$',
