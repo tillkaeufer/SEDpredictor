@@ -403,7 +403,7 @@ def main():
         
         create_density_plot=st.checkbox('Plot 2D density',value=True)
         
-        plot_column_dens=st.checkbox(label='Plot column density',value=True)
+        plot_column_dens=st.checkbox(label='Plot column density',value=False)
         
         
         #print(slider_dict)
@@ -510,6 +510,8 @@ def main():
         #print(features)
         
         
+        plot_hrd_check=st.checkbox('Plot HRD',value=False)
+        
         #slider to adjust the x and y axis
         lam_min_start,lam_max_start=np.min(wavelength),10**3
         flux_min_start,flux_max_start=10**-12,10**-7
@@ -538,8 +540,7 @@ def main():
             flux_max=flux_max_start
             zmax=1.0
             cmin=4.0
-            
-        plot_hrd_check=st.checkbox('Plot HRD',value=True)    
+               
         st.markdown('---')
         
         #create dictionary of the input parametermeters for checking if possible and for plotting
