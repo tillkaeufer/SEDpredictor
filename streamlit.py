@@ -185,6 +185,7 @@ def calculate_mstar(Teff,Lstar):
     
     return log_mass
 
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def angle_to_mcfost_val(angle):
     rad=angle*np.pi/180
     cosx=np.cos(rad)
@@ -205,15 +206,18 @@ def transform_parameter(paraname,val,header,scaler):
         val=scaler.transform(dummy)[0,pos]
         return val,pos
 
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def change_dist(dist,data):
     new_data=data*(100/dist)**2
     return new_data
-    
+
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)      
 def reddening( lam,flux, e_bv, R_V):
         # lam in mu m 
         fluxRed = pyasl.unred(lam*10**4, flux, ebv=-e_bv, R_V=R_V)
         return fluxRed
 
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def spline(lam,nuflux,new_lam):
 
     #interpolation on a double logarithmic scale
@@ -467,10 +471,11 @@ def main():
                 with col2:
                     middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
                 if 'log' in paraname:
-                    if 'disk,2' in paraname:
-                        round_n=12
-                    else:
-                        round_n=6    
+                    
+                    round_n=6 
+                    while np.round(10**middle,round_n)==0:
+                        round_n+=3
+                       
                     middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,round_n)),key=c)#
                     middle=np.log10(float(middle))
                     c+=1       
@@ -563,7 +568,7 @@ def main():
         if not check_if_in(p0=np.log10(dict_para['Teff']),p1=np.log10(dict_para['Lstar'])):
             st.error('Star not in the range the NN was trained on!!', icon="🚨")
             plot_hrd_check=True
-            #TODO HDR of where star is
+
         
         error_string=check_if_valid_prediction(dict_para,two_zone=two_zone)
         #TODO in check if valid, general limits of the sample
