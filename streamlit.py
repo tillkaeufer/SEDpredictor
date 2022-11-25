@@ -58,11 +58,15 @@ im = Image.open("icon.png")
                                 
 st.set_page_config(
     layout="wide",
-    page_title='SED predictor',
-    page_icon=im
+    page_title='SEDpredictor',
+    page_icon=im,
+    initial_sidebar_state='expanded',
+    menu_items={'Get help': 'https://tillkaeufer.github.io/sedpredictor',
+                'Report a bug': 'mailto:till.kaeufer@oeaw.ac.at',
+                'About': 'SED predictions of protoplanetary disks by a neural networks. This app is made by Till Kaeufer.'}
+    
 
 )
-
 
 NN_name='single_46_opti' # what network to use
 star_name='star_m-only_3' #what network for mass prediction of star
