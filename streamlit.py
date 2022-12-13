@@ -1,4 +1,4 @@
-debug=True
+debug=False
 from time import time
 timing=False
 fast_plotting=False
@@ -97,10 +97,10 @@ def para_to_parameterin(input_string):
     para_dict={}
     lines=input_string.split('\n')
     for line in lines:
-        print(line)
+        if debug: print(line)
         split_line=line.split()
         value=float(split_line[0])
-        print(value,split_line)
+        if debug: print(value,split_line)
         parameter=split_line[1]
         para_dict[parameter]=value
     with open('TemplateParameter.in','r') as f_temp:
@@ -200,11 +200,11 @@ def load_incl_NN(path_data,incl_name):
 
 def check_inclination(features,lim_shielded,scaler,incl_scaler,incl_model_saved):
     features=scaler.inverse_transform(features)
-    print(features)
+    if debug: print(features)
     scaled_f=incl_scaler.transform(features)
     
     incl_prediction=incl_model_saved(scaled_f,training=False)
-    print(incl_prediction)
+    if debug: print(incl_prediction)
     if incl_prediction>=lim_shielded:
         #star is in danger of being shielded
         return False
@@ -369,7 +369,7 @@ def main():
                 for i in range(0,len(lines)):
                     sp_line=lines[i].split()
                     if sp_line==[]:
-                        print('Empty line')
+                        if debug: print('Empty line')
                     else:
                         lam=float(sp_line[0])
                         flux=float(sp_line[1])
@@ -474,7 +474,7 @@ def main():
 
         #distance
         st.sidebar.write('Distance [pc]')
-        dist_start=float(st.sidebar.text_input(label='',value=dist_start,key='dist'))
+        dist_start=float(st.sidebar.text_input(label='dist',label_visibility="hidden",value=dist_start,key='dist'))
         
 
         st.sidebar.markdown('---')
@@ -482,11 +482,11 @@ def main():
         st.sidebar.write('Reddening')
         
         st.sidebar.write('$E_{BV}$')
-        e_bvstart=float(st.sidebar.text_input(label='',value=e_bvstart,key='ebv'))
+        e_bvstart=float(st.sidebar.text_input(label='ebv',label_visibility="hidden",value=e_bvstart,key='ebv'))
         
     
         st.sidebar.write('$R_V$')
-        R_Vstart=float(st.sidebar.text_input(label='',value=R_Vstart,key='rv'))
+        R_Vstart=float(st.sidebar.text_input(label='rv',label_visibility="hidden",value=R_Vstart,key='rv'))
         
     
         st.sidebar.markdown('---')
@@ -512,19 +512,19 @@ def main():
                     
                     st.sidebar.write(paraname)
                 with col2:
-                    middle=st.sidebar.slider('',min_value=float(mini),max_value=float(maxi),value=value)
+                    middle=st.sidebar.slider(key,label_visibility="hidden",min_value=float(mini),max_value=float(maxi),value=value)
                 if 'log' in paraname:
                     
                     round_n=6 
                     while np.round(10**middle,round_n)==0:
                         round_n+=3
                        
-                    middle=st.sidebar.text_input(label='',value=float(np.round(10**middle,round_n)),key=c)#
+                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(np.round(10**middle,round_n)),key=c)#
                     middle=np.log10(float(middle))
                     c+=1       
     
                 else:
-                    middle=st.sidebar.text_input(label='',value=float(middle),key=c) #name
+                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(middle),key=c) #name
                     c+=1
                 #print(c)
                 st.sidebar.markdown('---')
@@ -537,10 +537,10 @@ def main():
                     st.sidebar.write(paraname)
                 if 'log' in paraname:
                     
-                    middle=st.sidebar.text_input(label='',value=float(np.round(10**value,4)),key=c)
+                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(np.round(10**value,4)),key=c)
                     middle=np.log10(float(middle))
                 else:
-                    middle=st.sidebar.text_input(label='',value=float(value),key=c)
+                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(value),key=c)
                 c+=1
                 
             if timing:
@@ -598,13 +598,13 @@ def main():
         #create dictionary of the input parameters for checking if possible and for plotting
         exp_features=scaler.inverse_transform(features)
         
-        print(np.shape(exp_features),np.shape(header))
+        if debug: print(np.shape(exp_features),np.shape(header))
         dict_para={}
         for i in range(len(header)):
             if log_dict[header[i]]=='log':
                 exp_features[:,i]=10**(exp_features[:,i])
             dict_para[header[i]]=exp_features[:,i][0]
-        print(dict_para)
+        if debug: print(dict_para)
         
         
         
@@ -801,7 +801,7 @@ def main():
             exp_para=st.checkbox(label='Export Parameters',value=False)
             if exp_para:
                 exp_features=scaler.inverse_transform(features)
-                print(np.shape(exp_features),np.shape(header))
+                if debug: print(np.shape(exp_features),np.shape(header))
                 para_string=''
                 for i in range(len(header)):
                     if log_dict[header[i]]=='log':
@@ -814,7 +814,7 @@ def main():
                 para_string=para_string+ str(R_Vstart)+' R(V) \n'
                 para_string=para_string+ str(dist_start)+' Dist[pc]'
                 
-                print(para_string)
+                if debug: print(para_string)
                 st.download_button('Download Parameter file [can be used for upload]', para_string,'Input.txt')
                 
                 parameterin_string=para_to_parameterin(para_string)

@@ -1,5 +1,5 @@
 
-
+debug=False
 from PyAstronomy import pyasl
 import numpy as np
 
@@ -12,8 +12,8 @@ def load_observations(folder,data_file,dereddening_data=False):
                 e_bv=float(lines[i+1])
             if 'R_V' in lines[i]:
                 R_V=float(lines[i+1])
-    print(f'E(B-V)={e_bv}')
-    print(f'R_V={R_V}')
+    if debug: print(f'E(B-V)={e_bv}')
+    if debug: print(f'R_V={R_V}')
 
     data_array=[]
     name_array=[]
@@ -25,7 +25,7 @@ def load_observations(folder,data_file,dereddening_data=False):
                 for i in range(2,len(lines)):
                     sp_line=lines[i].split()
                     if sp_line==[]:
-                        print('Empty line')
+                       if debug: print('Empty line')
                     elif sp_line[3]=='ok':
                         lam=float(sp_line[0])
                         flux=float(sp_line[1])
@@ -35,15 +35,16 @@ def load_observations(folder,data_file,dereddening_data=False):
                             data_array.append([lam,flux,flux_sig])
                             name_array.append(name)
             else:
-                print('Different Header')
-                print(header)
+                if debug: 
+                    print('Different Header')
+                    print(header)
     if data_file=='SED_to_fit.dat':
         with open(f'{folder}/SED_to_fit.dat') as f:
             lines=f.readlines()
             for i in range(0,len(lines)):
                 sp_line=lines[i].split()
                 if sp_line==[]:
-                    print('Empty line')
+                    if debug: print('Empty line')
                 else:
                     lam=float(sp_line[0])
                     flux=float(sp_line[1])

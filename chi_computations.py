@@ -1,5 +1,5 @@
 import numpy as np
-
+debug=False
 def chi_window(Fmod,Fphot,sphot,lphot):
     #--------- compute chi in spectral windows --------
     window = [0.3,1.0,3.0,8.0,15.0,30.0,100.0,300.0,1000.0,3000.0,1.E+99]

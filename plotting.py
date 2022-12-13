@@ -302,7 +302,7 @@ class density_plot:
     
 # hrd utils
 
-def load_siesstracks():
+def load_siesstracks(debug=False):
     files=glob.glob('./data/Siesstracks/*.hrd')
     files.sort()
     L=[]
@@ -312,13 +312,13 @@ def load_siesstracks():
     max_T,min_T=0,100000
     max_L,min_L=0,10
     for i in range(len(files)):
-        print(files[i],np.shape(np.loadtxt(files[i])[:,2]))
+        if debug: print(files[i],np.shape(np.loadtxt(files[i])[:,2]))
         idx=np.max(np.where(np.loadtxt(files[i])[:,1]==1))+1
         L.append(np.loadtxt(files[i])[:idx,2]) #L
         T.append(np.loadtxt(files[i])[:idx,6]) #T
         ages.append(np.loadtxt(files[i])[:idx,-1])
         m.append(np.loadtxt(files[i])[0,-2])
-        print(len(ages[i]),len(T[i]),len(L[i]))
+        if debug: print(len(ages[i]),len(T[i]),len(L[i]))
         max_t,min_t = np.max(T[i]),np.min(T[i])
         if max_t>max_T:
             max_T=max_t
