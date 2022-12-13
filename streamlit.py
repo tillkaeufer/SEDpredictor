@@ -1,3 +1,4 @@
+debug=True
 from time import time
 timing=False
 fast_plotting=False
@@ -190,11 +191,39 @@ def calculate_mstar(Teff,Lstar):
     return log_mass
 
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)  
+def load_incl_NN(path_data,incl_name):
+    
+    incl_scaler=joblib.load(f'{path_data}/scaler/{incl_name}_para_scaler.save')
+    incl_y_scaler=joblib.load(f'{path_data}/scaler/{incl_name}_sed_scaler.save')
+    incl_model_saved=load_model(f'{path_data}/InclNets/{incl_name}.h5',compile=False)
+    return incl_model_saved, incl_scaler, incl_y_scaler
+
+def check_inclination(features,lim_shielded,scaler,incl_scaler,incl_model_saved):
+    features=scaler.inverse_transform(features)
+    print(features)
+    scaled_f=incl_scaler.transform(features)
+    
+    incl_prediction=incl_model_saved(scaled_f,training=False)
+    print(incl_prediction)
+    if incl_prediction>=lim_shielded:
+        #star is in danger of being shielded
+        return False
+    else:
+        #everything is fine
+        return True
+
+
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
 def angle_to_mcfost_val(angle):
     rad=angle*np.pi/180
     cosx=np.cos(rad)
     mcfost_incl=9-(cosx-0.05)/0.1    
     return mcfost_incl
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)  
+def mcfost_val_to_angle(mcfost_incl):
+    rad=np.arccos(0.95-0.1*mcfost_incl)
+    angle=rad*180/np.pi
+    return angle
 
 
 def transform_parameter(paraname,val,header,scaler):
@@ -300,14 +329,24 @@ def main():
             log_dict=log_dict_two
 
             NN_name='two_38_small_batch' # what network to use
+            
+            #what inclination network to use
+            incl_name='shielded_two_02'
+            lim_shielded=0.057705164
         else:
             two_zone=False
             slider_dict=slider_dict_single
             log_dict=log_dict_single
             
             NN_name='single_46_opti' # what network to use
+            
+            #what inclination network to use
+            incl_name='shielded_single_04'
+            lim_shielded=0.072104424
+            
+            
         scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name,two_zone=two_zone)
-       
+        incl_model_saved, incl_scaler, incl_y_scaler=load_incl_NN(path_data=path_data, incl_name=incl_name)
             
                                   
 
@@ -556,8 +595,9 @@ def main():
                
         st.markdown('---')
         
-        #create dictionary of the input parametermeters for checking if possible and for plotting
+        #create dictionary of the input parameters for checking if possible and for plotting
         exp_features=scaler.inverse_transform(features)
+        
         print(np.shape(exp_features),np.shape(header))
         dict_para={}
         for i in range(len(header)):
@@ -567,13 +607,40 @@ def main():
         print(dict_para)
         
         
-        #checking if possible
         
+        
+        
+        #checking if possible
+        for key in dict_para:
+            if log_dict[key]=='log':
+                val=np.log10(dict_para[key])
+            else:
+                val=dict_para[key]
+            
+            if key=='incl':
+                val=mcfost_val_to_angle(val)
+                if debug:
+                    print('Inclination:', val)
+            if val<slider_dict[key]['lims'][0]:
+                st.error(f'Value ({val}) for {key} is below the minimal limit', icon="🚨")
+        
+        
+        
+            elif val>slider_dict[key]['lims'][1]:
+                st.error(f'Value ({val}) for {key} is above the maximal limit', icon="🚨")
+                
+        #star in trained region?
         if not check_if_in(p0=np.log10(dict_para['Teff']),p1=np.log10(dict_para['Lstar'])):
             st.error('Star not in the range the NN was trained on!!', icon="🚨")
             plot_hrd_check=True
 
         
+        #check if star is shielded
+        star_unshielded=check_inclination(features,lim_shielded,scaler,incl_scaler,incl_model_saved)
+        if not star_unshielded:
+            st.error('The system is too edge-on, therefore the prediction is not reliable', icon="🚨")
+        
+
         error_string=check_if_valid_prediction(dict_para,two_zone=two_zone)
         #TODO in check if valid, general limits of the sample
         if error_string!='':
