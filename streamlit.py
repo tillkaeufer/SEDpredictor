@@ -49,6 +49,7 @@ from plotting import density_plot, load_siesstracks, plot_hrd
 #from para_transform import para_to_parameterin
 #from rout import adjust_rout
 from check_if_possible import load_all_star_lims,normalizing,find_nearest,in_or_out,check_if_in, new_radius_lims,check_if_valid_prediction
+from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
 
 import streamlit as st
 para_dict={}
@@ -321,14 +322,123 @@ def main():
                                 selected_answer = st.sidebar.selectbox('Answer', answers, format_func=lambda x: x.replace('-',' ').capitalize(), key=question+'_select')
         
         #loading the networks and scalers for single or two-zone models
-        
-        from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
+          
         if complexity=='Two-zone':
             two_zone=True
             
-            slider_dict=slider_dict_two
-            log_dict=log_dict_two
+            slider_dict={
+            'Mstar': {'label': '$log_{10}(M_{star}) [M_{sun}]$',
+              'lims': [-0.7, 0.4],
+              'x0': 0.06,
+              'priority': 1},
+             'Teff': {'label': '$log_{10}(T_{eff})$',
+              'lims': [3.49, 4.02],
+              'x0': 3.64,
+              'priority': 1},
+             'Lstar': {'label': '$log_{10}(L_{star})$',
+              'lims': [-1.55, 1.76],
+              'x0': 0.24,
+              'priority': 1},
+             'fUV': {'label': '$log_{10}(f_{UV})$',
+              'lims': [-3.0, -1.0],
+              'x0': -1.57,
+              'priority': 1},
+             'pUV': {'label': '$log_{10}(p_{UV})$',
+              'lims': [-0.3, 0.3],
+              'x0': -0.02,
+              'priority': 1},
+             'Mdisk': {'label': '$log_{10}(M_{disk})$',
+              'lims': [-5.6, 0.39],
+              'x0': -1.367,
+              'priority': 2},
+             'incl': {'label': '$incl [Deg]$', 'lims': [0, 87], 'x0': 20.0, 'priority': 2},
+             'Rin': {'label': '$R_{in}[AU]$',
+              'lims': [1.0, 70.0],
+              'x0': 18,
+              'priority': 2},
+             'Rtaper': {'label': '$log_{10}(R_{taper}[AU])$',
+              'lims': [0.7, 2.54],
+              'x0': 1.95,
+              'priority': 2},
+             'Rout': {'label': '$log_{10}(R_{out}[AU])$',
+              'lims': [-1.94, 2.07],
+              'x0': 2.556,
+              'priority': 2},
+             'epsilon': {'label': '$\\epsilon$',
+              'lims': [0.0, 2.5],
+              'x0': 1,
+              'priority': 2},
+             'MCFOST_BETA': {'label': '$\\beta$',
+              'lims': [0.9, 1.4],
+              'x0': 1.15,
+              'priority': 2},
+             'MCFOST_H0': {'label': '$H_0[AU]$',
+              'lims': [3.0, 35.0],
+              'x0': 12,
+              'priority': 2},
+             'a_settle': {'label': '$log_{10}(a_{settle})$',
+              'lims': [-5.0, -1.0],
+              'x0': -3,
+              'priority': 3},
+             'amin': {'label': '$log_{10}(a_{min})$',
+              'lims': [-3.0, -0.7],
+              'x0': -1.5,
+              'priority': 3},
+             'amax': {'label': '$log_{10}(a_{max})$',
+              'lims': [2.48, 4.0],
+              'x0': 3.6,
+              'priority': 3},
+             'apow': {'label': '$a_{pow}$', 'lims': [3.0, 5.0], 'x0': 3.6, 'priority': 3},
+             'Mg0.7Fe0.3SiO3[s]': {'label': 'Mg0.7Fe0.3SiO3[s]',
+              'lims': [0.45, 0.7],
+              'x0': 0.57,
+              'priority': 3},
+             'amC-Zubko[s]': {'label': 'amC-Zubko[s]',
+              'lims': [0.05, 0.3],
+              'x0': 0.18,
+              'priority': 3},
+             'fPAH': {'label': '$log_{10}(f_{PAH})$',
+              'lims': [-3.5, -0.0],
+              'x0': -1.5,
+              'priority': 3},
+             'PAH_charged': {'label': '$PAH_{charged}$',
+              'lims': [0.0, 1.0],
+              'priority': 3},
+             'M2disk': {'label': '$log_{10}(M_{disk,2})$',
+              'lims': [-12.04, -0.49],
+              'x0': -6,
+              'priority': 4},
+             'e2psilon': {'label': '$\\epsilon_2$',
+              'lims': [-1.0, 2.0],
+              'x0': 0.7,
+              'priority': 4},
+             'MCFOST_H2': {'label': '$H_2[AU]$',
+              'lims': [0.02, 0.5],
+              'x0': 0.1,
+              'priority': 4},
+             'MCFOST_B2': {'label': '$\\beta_2$',
+              'lims': [0.05, 1.7],
+              'x0': 1.0,
+              'priority': 4},
+             'R2in': {'label': '$log_{10}(R_{in,2}[AU])$',
+              'lims': [-2.05, 2.03],
+              'x0': -0.5,
+              'priority': 4},
+             'R2out': {'label': '$log_{10}(R_{out,2}[AU])$',
+              'lims': [-2., 1.84],
+              'x0': 0.9,
+              'priority': 4},
+             'a2max': {'label': '$log_{10}(a_{max,2})$',
+              'lims': [-1.51, 4.0],
+              'x0': 2.5,
+              'priority': 4},
+             'f2PAH': {'label': '$log_{10}(f_{PAH,2})$',
+              'lims': [-6.98, -0.02],
+              'x0': -3,
+              'priority': 4}}
 
+
+            log_dict=log_dict_two
             NN_name='two_38_small_batch' # what network to use
             
             #what inclination network to use
@@ -336,7 +446,86 @@ def main():
             lim_shielded=0.057705164
         else:
             two_zone=False
-            slider_dict=slider_dict_single
+            slider_dict={
+            'Mstar': {'label': '$log_{10}(M_{star}) [M_{sun}]$',
+              'lims': [-0.7, 0.4],
+              'x0': 0.06,
+              'priority': 1},
+             'Teff': {'label': '$log_{10}(T_{eff})$',
+              'lims': [3.49, 4.03],
+              'x0': 3.64,
+              'priority': 1},
+             'Lstar': {'label': '$log_{10}(L_{star})$',
+              'lims': [-1.58, 1.75],
+              'x0': 0.24,
+              'priority': 1},
+             'fUV': {'label': '$log_{10}(f_{UV})$',
+              'lims': [-3.0, -1.0],
+              'x0': -1.57,
+              'priority': 1},
+             'pUV': {'label': '$log_{10}(p_{UV})$',
+              'lims': [-0.3, 0.3],
+              'x0': -0.02,
+              'priority': 1},
+             'Mdisk': {'label': '$log_{10}(M_{disk})$',
+              'lims': [-5.62, 0.39],
+              'x0': -1.367,
+              'priority': 2},
+             'incl': {'label': '$incl [Deg]$', 'lims': [0, 87], 'x0': 20.0, 'priority': 2},
+             'Rin': {'label': '$log_{10}(R_{in}[AU])$',
+              'lims': [-2.05, 2.0],
+              'x0': -0.7,
+              'priority': 2},
+             'Rtaper': {'label': '$log_{10}(R_{taper}[AU])$',
+              'lims': [0.7, 2.54],
+              'x0': 1.95,
+              'priority': 2},
+             'Rout': {'label': '$log_{10}(R_{out}[AU])$',
+              'lims': [1.25, 3.45],
+              'x0': 2.556,
+              'priority': 2},
+             'epsilon': {'label': '$\\epsilon$',
+              'lims': [0.0, 2.5],
+              'x0': 1,
+              'priority': 2},
+             'MCFOST_BETA': {'label': '$\\beta$',
+              'lims': [0.9, 1.4],
+              'x0': 1.15,
+              'priority': 2},
+             'MCFOST_H0': {'label': '$H_0[AU]$',
+              'lims': [3.0, 35.0],
+              'x0': 12,
+              'priority': 2},
+             'a_settle': {'label': '$log_{10}(a_{settle})$',
+              'lims': [-5.0, -1.0],
+              'x0': -3,
+              'priority': 3},
+             'amin': {'label': '$log_{10}(a_{min})$',
+              'lims': [-3.0, -0.7],
+              'x0': -1.5,
+              'priority': 3},
+             'amax': {'label': '$log_{10}(a_{max})$',
+              'lims': [2.48, 4.0],
+              'x0': 3.6,
+              'priority': 3},
+             'apow': {'label': '$a_{pow}$', 'lims': [3.0, 5.0], 'x0': 3.6, 'priority': 3},
+             'Mg0.7Fe0.3SiO3[s]': {'label': 'Mg0.7Fe0.3SiO3[s]',
+              'lims': [0.45, 0.7],
+              'x0': 0.57,
+              'priority': 3},
+             'amC-Zubko[s]': {'label': 'amC-Zubko[s]',
+              'lims': [0.05, 0.3],
+              'x0': 0.18,
+              'priority': 3},
+             'fPAH': {'label': '$log_{10}(f_{PAH})$',
+              'lims': [-3.5, -0.0],
+              'x0': -1.5,
+              'priority': 3},
+             'PAH_charged': {'label': '$PAH_{charged}$',
+              'lims': [0.0, 1.0],
+              'priority': 3}}
+               
+            
             log_dict=log_dict_single
             
             NN_name='single_46_opti' # what network to use
@@ -344,6 +533,7 @@ def main():
             #what inclination network to use
             incl_name='shielded_single_04'
             lim_shielded=0.072104424
+
         scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name,two_zone=two_zone)
         incl_model_saved, incl_scaler, incl_y_scaler=load_incl_NN(path_data=path_data, incl_name=incl_name)
             

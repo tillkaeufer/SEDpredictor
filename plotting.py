@@ -371,7 +371,8 @@ def plot_hrd(L,T,m,max_T,max_L,min_T,min_L,isochrome,chrome_list,lim_o_T,lim_o_L
     xtickslocs=[3*10**3,5*10**3,10**4,2*10**4]
     xtickslocs_names=[r'$3\cdot10^3$',r'$5\cdot10^3$',r'$10^4$',r'$2\cdot10^4$']
     #print(xtickslocs,xtickslocs_names)
-    ax.set_xticks(xtickslocs,xtickslocs_names)
+    ax.set_xticks(ticks=xtickslocs)#
+    ax.set_xticklabels(labels=xtickslocs_names)
     #ax.xaxis.set_major_locator(mticker.FixedLocator(xtickslocs))
     for v in range(len(chrome_list)):
         ax.plot(isochrome[v,:,0],isochrome[v,:,1],linestyle='--',alpha=0.7,color='grey')
