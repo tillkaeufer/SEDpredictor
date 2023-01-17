@@ -44,7 +44,7 @@ from scipy import interpolate
 from PyAstronomy import pyasl
 from observation import load_observations
 from chi_computations import chi_window,chi_squared,chi_squared_reduced
-from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
+#from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
 from plotting import density_plot, load_siesstracks, plot_hrd
 #from para_transform import para_to_parameterin
 #from rout import adjust_rout
@@ -322,6 +322,7 @@ def main():
         
         #loading the networks and scalers for single or two-zone models
         
+        from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_dict_two 
         if complexity=='Two-zone':
             two_zone=True
             
@@ -343,8 +344,6 @@ def main():
             #what inclination network to use
             incl_name='shielded_single_04'
             lim_shielded=0.072104424
-            
-            
         scaler,y_scaler, model_saved,header, wavelength=load_data(path_data=path_data,NN_name=NN_name,two_zone=two_zone)
         incl_model_saved, incl_scaler, incl_y_scaler=load_incl_NN(path_data=path_data, incl_name=incl_name)
             
