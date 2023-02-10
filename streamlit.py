@@ -54,6 +54,8 @@ from dict_file import slider_dict_single, log_dict_single, slider_dict_two, log_
 import streamlit as st
 para_dict={}
 
+#TODO correct reduced chi by dividing by the degrees of freedom and not number of points
+
 #image icon
 im = Image.open("icon.png")
 
@@ -278,7 +280,7 @@ def main():
     <br><br/>
     This tool predictions SEDs of protoplanetary disk using neural networks.
     <br/>
-    If this tool is useful to your work, please cite (Kaeufer et al., submitted)
+    If this tool is useful to your work, please cite [Kaeufer et al. 2023](https://arxiv.org/abs/2302.04629)
     """
     , unsafe_allow_html=True)
 #    should_tell_me_more = st.button('Tell me more')
