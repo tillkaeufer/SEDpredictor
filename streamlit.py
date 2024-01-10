@@ -285,7 +285,7 @@ def main():
     , unsafe_allow_html=True)
 #    should_tell_me_more = st.button('Tell me more')
     should_tell_me_more =False
-    st.warning('This website is just in the making, so be careful.')
+#    st.warning('This website is just in the making, so be careful.')
     
     st.markdown(
     """
