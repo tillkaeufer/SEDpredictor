@@ -728,7 +728,7 @@ def main():
                     st.sidebar.write(paraname)
                 if 'log' in paraname:
                     
-                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(np.round(10**value,4)),key=c)
+                    middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(np.round(10**value,6)),key=c)
                     middle=np.log10(float(middle))
                 else:
                     middle=st.sidebar.text_input(label=key,label_visibility="hidden",value=float(value),key=c)
